@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Profile</title>
+    <link rel="stylesheet" th:href="@{/css/studentmodule.css}">
+</head>
+<body>
+
+<div class="navbar">Student Dashboard</div>
+
+<div class="container">
+    <div class="card">
+        <h2>My Profile</h2>
+
+<p><strong>Name:</strong> <span th:text="${user.username}"></span></p>
+<p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+<p><strong>Role:</strong> <span th:text="${user.role}"></span></p>
+
+<a href="/student/dashboard">Back to Dashboard</a>
+
+    </div>
+</div>
+
+</body>
+</html>

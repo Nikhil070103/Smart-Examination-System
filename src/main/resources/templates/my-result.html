@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Results</title>
+    <link rel="stylesheet" th:href="@{/css/studentmodule.css}">
+</head>
+<body>
+
+<div class="navbar">Exam Results</div>
+
+<div class="container">
+    <div class="card">
+        <h2>My Results</h2>
+
+        <table class="table">
+            <tr>
+                <th>Exam</th>
+                <th>Score</th>
+                <th>Status</th>
+            </tr>
+            <tr>
+                <td>Java Fundamentals</td>
+                <td>82%</td>
+                <td>Pass</td>
+            </tr>
+            <tr>
+                <td>DBMS</td>
+                <td>74%</td>
+                <td>Pass</td>
+            </tr>
+        </table>
+
+        <a href="/student/dashboard" class="btn">Back</a>
+    </div>
+</div>
+
+</body>
+</html>

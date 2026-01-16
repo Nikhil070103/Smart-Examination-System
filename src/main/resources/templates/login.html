@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login | Smart Examination System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css?v=4}">
+</head>
+<body>
+
+<div class="login-card">
+    <h2>Smart Examination System</h2>
+    <p class="subtitle">Login to continue</p>
+
+    <!-- ================= ALERTS ================= -->
+
+    <div th:if="${message}" class="alert success" th:text="${message}"></div>
+    <div th:if="${error}" class="alert error" th:text="${error}"></div>
+    <div th:if="${warning}" class="alert warning" th:text="${warning}"></div>
+    <div th:if="${info}" class="alert info" th:text="${info}"></div>
+
+    <!-- ================= LOGIN FORM ================= -->
+
+    <form th:action="@{/login}" method="post">
+
+        <div class="input-group">
+            <input type="email" name="email" required>
+            <label>Email</label>
+        </div>
+
+        <div class="input-group">
+            <input type="password" name="password" required>
+            <label>Password</label>
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <p class="register-link">
+        New user? <a th:href="@{/register}">Create account</a>
+    </p>
+</div>
+ 
+
+</body>
+</html>

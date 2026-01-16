@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register | Smart Examination System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css?v=5}">
+</head>
+<body>
+
+<div class="login-card">
+    <h2>Register</h2>
+    <p class="subtitle">Create your account to get started</p>
+
+    <!-- ================= ALERTS ================= -->
+
+    <div th:if="${message}" class="alert success" th:text="${message}"></div>
+    <div th:if="${error}" class="alert error" th:text="${error}"></div>
+    <div th:if="${warning}" class="alert warning" th:text="${warning}"></div>
+    <div th:if="${info}" class="alert info" th:text="${info}"></div>
+
+    <!-- ================= REGISTER FORM ================= -->
+
+    <form th:action="@{/register}" method="post" th:object="${user}">
+
+        <div class="input-group">
+            <input type="text" th:field="*{username}" required>
+            <label>Username</label>
+        </div>
+
+        <div class="input-group">
+            <input type="email" th:field="*{email}" required>
+            <label>Email</label>
+        </div>
+
+        <div class="input-group">
+            <input type="password" th:field="*{password}" required>
+            <label>Password</label>
+        </div>
+
+        <div class="input-group">
+            <select th:field="*{role}">
+                <option value="STUDENT">Student</option>
+                <option value="ADMIN">Admin</option>
+            </select>
+            <label>Role</label>
+        </div>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <p class="register-link">
+        Already have an account? <a th:href="@{/login}">Login here</a>
+    </p>
+</div>
+
+<!-- OPTIONAL: Auto-hide alerts -->
+<script>
+    setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(a => a.style.display = 'none');
+    }, 5000);
+</script>
+
+</body>
+</html>

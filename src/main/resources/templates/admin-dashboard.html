@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+
+<div class="dashboard-container">
+    <h1>Admin Dashboard</h1>
+
+    <div class="card-container">
+        <div class="card" onclick="location.href='/admin/students'">
+            <h3>Manage Students</h3>
+        </div>
+
+        <div class="card" onclick="location.href='/admin/exams'">
+            <h3>Manage Exams</h3>
+        </div>
+
+        <div class="card" onclick="location.href='/admin/results'">
+            <h3>View Results</h3>
+        </div>
+
+        <div class="card" onclick="location.href='/logout'">
+            <h3>Logout</h3>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

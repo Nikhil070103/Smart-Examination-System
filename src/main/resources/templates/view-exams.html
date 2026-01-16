@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Exams</title>
+    <link rel="stylesheet" th:href="@{/css/studentmodule.css}">
+</head>
+<body>
+
+<div class="navbar">Available Exams</div>
+
+<div class="container">
+    <div class="card">
+        <h2>Upcoming Exams</h2>
+
+        <table class="table">
+            <tr>
+                <th>Exam Name</th>
+                <th>Date</th>
+                <th>Duration</th>
+            </tr>
+            <tr>
+                <td>Java Fundamentals</td>
+                <td>10 Jan 2026</td>
+                <td>60 min</td>
+            </tr>
+            <tr>
+                <td>Database Management</td>
+                <td>15 Jan 2026</td>
+                <td>90 min</td>
+            </tr>
+        </table>
+
+        <a href="/student/dashboard" class="btn">Back</a>
+    </div>
+</div>
+
+</body>
+</html>
