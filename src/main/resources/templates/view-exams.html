@@ -1,37 +1,68 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>View Exams</title>
-    <link rel="stylesheet" th:href="@{/css/studentmodule.css}">
+    <title>Available Exams</title>
+    <link rel="stylesheet" th:href="@{/css/student-exams.css}">
 </head>
 <body>
 
-<div class="navbar">Available Exams</div>
-
 <div class="container">
-    <div class="card">
-        <h2>Upcoming Exams</h2>
+    <h2>Available Exams</h2>
 
-        <table class="table">
-            <tr>
-                <th>Exam Name</th>
-                <th>Date</th>
-                <th>Duration</th>
-            </tr>
-            <tr>
-                <td>Java Fundamentals</td>
-                <td>10 Jan 2026</td>
-                <td>60 min</td>
-            </tr>
-            <tr>
-                <td>Database Management</td>
-                <td>15 Jan 2026</td>
-                <td>90 min</td>
-            </tr>
-        </table>
+    <table>
+        <tr>
+            <th>Exam</th>
+            <th>Subject</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
 
-        <a href="/student/dashboard" class="btn">Back</a>
-    </div>
+        <tr th:each="exam : ${exams}">
+            
+            <td th:text="${exam.examName}"></td>
+            <td th:text="${exam.subject}"></td>
+
+            <!-- STATUS -->
+            <td>
+                <span th:if="${exam.startTime == null}" class="gray">Not Scheduled</span>
+
+                <span th:if="${exam.startTime != null and T(java.time.LocalDateTime).now().isBefore(exam.startTime)}"
+                      class="blue">Upcoming</span>
+
+                <span th:if="${exam.startTime != null and exam.endTime != null and 
+                              T(java.time.LocalDateTime).now().isAfter(exam.startTime) and 
+                              T(java.time.LocalDateTime).now().isBefore(exam.endTime)}"
+                      class="green">Live</span>
+
+                <span th:if="${exam.endTime != null and T(java.time.LocalDateTime).now().isAfter(exam.endTime)}"
+                      class="red">Completed</span>
+            </td>
+
+            <!-- ACTION -->
+            <td>
+
+                <!-- START BUTTON (ONLY IF LIVE) -->
+                <a th:if="${exam.startTime != null and exam.endTime != null and 
+                           T(java.time.LocalDateTime).now().isAfter(exam.startTime) and 
+                           T(java.time.LocalDateTime).now().isBefore(exam.endTime)}"
+                   th:href="@{/student/exams/{id}/start(id=${exam.id})}"
+                   class="btn start">
+                   Start
+                </a>
+
+                <!-- DISABLED -->
+                <span th:if="${exam.startTime == null or 
+                              T(java.time.LocalDateTime).now().isBefore(exam.startTime) or 
+                              T(java.time.LocalDateTime).now().isAfter(exam.endTime)}"
+                      class="btn disabled">
+                    Not Available
+                </span>
+
+            </td>
+
+        </tr>
+    </table>
+
 </div>
 
 </body>

@@ -1,25 +1,238 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>My Profile</title>
-    <link rel="stylesheet" th:href="@{/css/studentmodule.css}">
+
+    <title>Student Profile</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/profile.css}">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
 </head>
+
 <body>
 
-<div class="navbar">Student Dashboard</div>
+<div class="profile-container">
 
-<div class="container">
-    <div class="card">
-        <h2>My Profile</h2>
+    <!-- HEADER -->
+    <div class="profile-header">
 
-<p><strong>Name:</strong> <span th:text="${user.username}"></span></p>
-<p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
-<p><strong>Role:</strong> <span th:text="${user.role}"></span></p>
+        <div class="header-left">
 
-<a href="/student/dashboard">Back to Dashboard</a>
+            <!-- AVATAR -->
+            <div class="avatar"
+
+                 th:text="${#strings.substring(student.name,0,1)}">
+
+                S
+
+            </div>
+
+            <!-- INFO -->
+            <div class="student-info">
+
+                <h2 th:text="${student.name}">
+                    Student Name
+                </h2>
+
+                <p th:text="${student.course + ' | Semester ' + student.semester}">
+                    MCA | Semester 4
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- STATUS -->
+        <div class="status-badge">
+
+            ✅ Face Registered
+
+        </div>
 
     </div>
+
+    <!-- PERSONAL -->
+    <div class="profile-card">
+
+        <h3>Personal Details</h3>
+
+        <div class="info-grid">
+
+            <div class="info-item">
+
+                <label>Father Name</label>
+
+                <p th:text="${student.fatherName}"></p>
+
+            </div>
+
+            <div class="info-item">
+
+                <label>Date of Birth</label>
+
+                <p th:text="${student.dob}"></p>
+
+            </div>
+
+            <div class="info-item">
+
+                <label>Gender</label>
+
+                <p th:text="${student.gender}"></p>
+
+            </div>
+
+            <div class="info-item">
+
+                <label>Mobile Number</label>
+
+                <p th:text="${student.mobile}"></p>
+
+            </div>
+
+            <div class="info-item">
+
+                <label>Address</label>
+
+                <p th:text="${student.address}"></p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ACADEMIC -->
+    <div class="profile-card">
+
+        <h3>Academic Details</h3>
+
+        <div class="info-grid">
+
+            <div class="info-item">
+
+                <label>Roll Number</label>
+
+                <p th:text="${student.rollNumber}"></p>
+
+            </div>
+
+            <div class="info-item">
+
+                <label>Enrollment Number</label>
+
+                <p th:text="${student.enrollmentNumber}"></p>
+
+            </div>
+
+            <div class="info-item">
+
+                <label>Course</label>
+
+                <p th:text="${student.course}"></p>
+
+            </div>
+
+            <div class="info-item">
+
+                <label>Branch</label>
+
+                <p th:text="${student.branch}"></p>
+
+            </div>
+
+            <div class="info-item">
+
+                <label>Semester</label>
+
+                <p th:text="${student.semester}"></p>
+
+            </div>
+
+            <div class="info-item">
+
+                <label>Section</label>
+
+                <p th:text="${student.section}"></p>
+
+            </div>
+
+            <div class="info-item">
+
+                <label>Session</label>
+
+                <p th:text="${student.session}"></p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- LOGIN -->
+    <div class="profile-card">
+
+        <h3>Login Details</h3>
+
+        <div class="info-grid">
+
+            <div class="info-item">
+
+                <label>Email</label>
+
+                <p th:text="${student.user.email}"></p>
+
+            </div>
+
+            <div class="info-item">
+
+                <label>Role</label>
+
+                <p th:text="${student.user.role}"></p>
+
+            </div>
+
+            <div class="info-item">
+
+                <label>Face Registration</label>
+
+                <p class="success">
+                    VERIFIED
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="btn-group">
+
+        <a href="/student/profile/edit"
+           class="btn edit-btn">
+
+            Edit Profile
+
+        </a>
+
+        <a href="/student/dashboard"
+           class="btn back-btn">
+
+            Back to Dashboard
+
+        </a>
+
+    </div>
+
 </div>
 
 </body>
+
 </html>

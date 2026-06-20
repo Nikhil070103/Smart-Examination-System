@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import SmartExaminationSystem.SES.service.UserService;
-
 @Controller
 @RequestMapping("/superadmin")
 public class SuperAdminController {
@@ -14,16 +13,37 @@ public class SuperAdminController {
     private UserService userService;
 
     @GetMapping("/approve")
-    public String approve(@RequestParam String token, Model model) {
+    public String showApprovalPage(
+            @RequestParam String email,
+            Model model) {
 
-        boolean approved = userService.approveAdmin(token);
+        model.addAttribute("email", email);
+
+        return "superadmin-otp";
+    }
+
+    @PostMapping("/approve")
+    public String approveAdmin(
+            @RequestParam String email,
+            @RequestParam String otp,
+            Model model) {
+
+        boolean approved =
+                userService.approveAdminByOtp(email, otp);
 
         if (approved) {
-            model.addAttribute("message", "Admin approved successfully");
-        } else {
-            model.addAttribute("error", "Invalid or expired approval link");
+
+            model.addAttribute(
+                    "message",
+                    "Admin approved successfully"
+            );
+
+            return "login";
         }
 
-        return "login";
+        model.addAttribute("email", email);
+        model.addAttribute("error", "Invalid OTP");
+
+        return "superadmin-otp";
     }
 }

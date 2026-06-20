@@ -1,0 +1,180 @@
+```html
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Admin Approval | Smart Examination System</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+}
+
+.card{
+    width:420px;
+    background:#fff;
+    border-radius:20px;
+    padding:35px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.25);
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.logo h2{
+    color:#4f46e5;
+}
+
+.subtitle{
+    text-align:center;
+    color:#666;
+    margin-bottom:25px;
+}
+
+.info-box{
+    background:#eef2ff;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:20px;
+    color:#4338ca;
+    font-size:14px;
+    text-align:center;
+}
+
+.input-group{
+    margin-bottom:20px;
+}
+
+.input-group label{
+    display:block;
+    margin-bottom:8px;
+    color:#444;
+    font-weight:600;
+}
+
+.input-group input{
+    width:100%;
+    padding:14px;
+    border:2px solid #ddd;
+    border-radius:10px;
+    font-size:16px;
+    transition:.3s;
+}
+
+.input-group input:focus{
+    outline:none;
+    border-color:#4f46e5;
+}
+
+.btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#4f46e5;
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.btn:hover{
+    background:#4338ca;
+}
+
+.alert{
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:15px;
+    text-align:center;
+}
+
+.error{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+.success{
+    background:#dcfce7;
+    color:#16a34a;
+}
+
+.email{
+    color:#4f46e5;
+    font-weight:bold;
+}
+</style>
+
+</head>
+<body>
+
+<div class="card">
+
+    <div class="logo">
+        <h2>Smart Examination System</h2>
+    </div>
+
+    <p class="subtitle">
+        Super Admin Approval Portal
+    </p>
+
+    <div class="info-box">
+        Enter the OTP received on the Super Admin email
+        to approve this admin account.
+    </div>
+
+    <div th:if="${error}" class="alert error"
+         th:text="${error}">
+    </div>
+
+    <div th:if="${message}" class="alert success"
+         th:text="${message}">
+    </div>
+
+    <form th:action="@{/superadmin/approve}" method="post">
+
+        <input type="hidden"
+               name="email"
+               th:value="${email}">
+
+        <div class="input-group">
+            <label>Admin Email</label>
+            <input type="text"
+                   th:value="${email}"
+                   readonly>
+        </div>
+
+        <div class="input-group">
+            <label>Approval OTP</label>
+            <input type="text"
+                   name="otp"
+                   maxlength="6"
+                   placeholder="Enter 6 Digit OTP"
+                   required>
+        </div>
+
+        <button type="submit" class="btn">
+            Approve Admin
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>
+```

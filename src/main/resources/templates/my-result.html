@@ -1,38 +1,196 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
+
     <title>My Results</title>
-    <link rel="stylesheet" th:href="@{/css/studentmodule.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/result-history.css}">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
 </head>
+
 <body>
 
-<div class="navbar">Exam Results</div>
+<div class="page">
 
-<div class="container">
-    <div class="card">
-        <h2>My Results</h2>
+    <!-- HEADER -->
+    <div class="header">
 
-        <table class="table">
+        <div>
+
+            <h1>My Exam Results</h1>
+
+            <p>
+                Track your exam performance
+                and results
+            </p>
+
+        </div>
+
+        <a href="/student/dashboard"
+           class="back-btn">
+
+            ← Dashboard
+
+        </a>
+
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-wrap">
+
+        <div class="stat-card">
+
+            <h3>Total Exams</h3>
+
+            <p th:text="${#lists.size(results)}"></p>
+
+        </div>
+
+        <div class="stat-card pass-card">
+
+            <h3>Passed</h3>
+
+            <p th:text="${results.?[(total != 0) and ((score * 100) / total >= 40)].size()}"></p>
+
+        </div>
+
+        <div class="stat-card fail-card">
+
+            <h3>Failed</h3>
+
+            <p th:text="${results.?[(total == 0) or ((score * 100) / total < 40)].size()}"></p>
+
+        </div>
+
+    </div>
+
+    <!-- TABLE CARD -->
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+
             <tr>
+
                 <th>Exam</th>
                 <th>Score</th>
+                <th>Total</th>
+                <th>Percentage</th>
+                <th>Date</th>
                 <th>Status</th>
+
             </tr>
-            <tr>
-                <td>Java Fundamentals</td>
-                <td>82%</td>
-                <td>Pass</td>
+
+            </thead>
+
+            <tbody>
+
+            <!-- EMPTY -->
+            <tr th:if="${#lists.isEmpty(results)}">
+
+                <td colspan="6"
+                    class="empty-row">
+
+                    No Results Available
+
+                </td>
+
             </tr>
-            <tr>
-                <td>DBMS</td>
-                <td>74%</td>
-                <td>Pass</td>
+
+            <!-- DATA -->
+            <tr th:each="r : ${results}"
+
+                th:classappend="${r.total != 0 and ((r.score * 100) / r.total) >= 40}
+                ? 'pass-row'
+                : 'fail-row'">
+
+                <!-- EXAM -->
+                <td>
+
+                    <div class="exam-name"
+                         th:text="${r.exam.examName}">
+                    </div>
+
+                </td>
+
+                <!-- SCORE -->
+                <td class="score"
+                    th:text="${r.score}">
+                </td>
+
+                <!-- TOTAL -->
+                <td th:text="${r.total}"></td>
+
+                <!-- PERCENTAGE -->
+                <td>
+
+                    <span class="percentage"
+
+                          th:text="${r.total != 0
+                          ? ((r.score * 100) / r.total)
+                          : 0} + '%'">
+
+                    </span>
+
+                </td>
+
+                <!-- DATE -->
+                <td>
+
+                    <span th:if="${r.submittedAt != null}"
+
+                          th:text="${#temporals.format(r.submittedAt,
+                          'dd MMM yyyy HH:mm')}">
+
+                    </span>
+
+                    <span th:if="${r.submittedAt == null}">
+                        N/A
+                    </span>
+
+                </td>
+
+                <!-- RESULT -->
+                <td>
+
+                    <!-- PASS -->
+                    <span th:if="${r.total != 0 and ((r.score * 100) / r.total) >= 40}"
+
+                          class="status pass">
+
+                        PASS
+
+                    </span>
+
+                    <!-- FAIL -->
+                    <span th:if="${r.total == 0 or ((r.score * 100) / r.total) < 40}"
+
+                          class="status fail">
+
+                        FAIL
+
+                    </span>
+
+                </td>
+
             </tr>
+
+            </tbody>
+
         </table>
 
-        <a href="/student/dashboard" class="btn">Back</a>
     </div>
+
 </div>
 
 </body>
+
 </html>

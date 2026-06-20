@@ -1,33 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>View Results</title>
-    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <meta charset="UTF-8">
+    <title>Manage Results</title>
+    <link rel="stylesheet" th:href="@{/css/results-dashboard.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
 <body>
 
 <div class="dashboard-container">
-    <h2>Student Results</h2>
 
-    <div class="card-container">
-        <div class="card">
-            <h3>Exam Wise Results</h3>
-            <p>View exam performance</p>
+    <!-- HEADER -->
+    <div class="header">
+
+        <div>
+            <h1>Manage Results</h1>
+            <p>Track student performance and rankings</p>
         </div>
 
-        <div class="card">
-            <h3>Student Wise Results</h3>
-            <p>Individual reports</p>
-        </div>
+        <a href="/admin/dashboard"
+           class="back-btn">
+            ← Dashboard
+        </a>
 
-        <div class="card">
-            <h3>Top Performers</h3>
-            <p>Rank & leaderboard</p>
-        </div>
     </div>
 
-    <br>
-    <a href="/admin/dashboard">⬅ Back to Dashboard</a>
+    <!-- STATS -->
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <h3>Total Results</h3>
+            <h2 th:text="${totalResults}">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Exams</h3>
+            <h2 th:text="${totalExams}">0</h2>
+        </div>
+
+        <div class="stat-card">
+            <h3>Top Score</h3>
+            <h2 th:text="${highestMarks}">0</h2>
+        </div>
+
+    </div>
+
+    <!-- FEATURES -->
+    <div class="card-container">
+
+        <!-- EXAM WISE -->
+        <div class="card"
+             onclick="location.href='/admin/results/exams'">
+
+            <div class="icon">📊</div>
+
+            <h3>Exam Wise Results</h3>
+
+            <p>
+                View complete performance
+                of each exam
+            </p>
+
+        </div>
+
+        <!-- STUDENT WISE -->
+        <div class="card"
+             onclick="location.href='/admin/results/students'">
+
+            <div class="icon">👨‍🎓</div>
+
+            <h3>Student Wise Results</h3>
+
+            <p>
+                Search student marks,
+                reports & history
+            </p>
+
+        </div>
+
+ 
+    </div>
+
 </div>
 
 </body>

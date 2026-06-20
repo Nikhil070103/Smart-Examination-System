@@ -1,0 +1,150 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', sans-serif;
+}
+
+body{
+    background:#f3f6fb;
+    color:#1f2937;
+}
+
+.container{
+    width:92%;
+    max-width:1400px;
+    margin:40px auto;
+}
+
+/* HEADER */
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+.header h2{
+    font-size:38px;
+    color:#1e3a5f;
+}
+
+.header p{
+    color:#6b7280;
+    margin-top:6px;
+}
+
+.back-btn{
+    background:#2563eb;
+    color:white;
+    text-decoration:none;
+    padding:12px 22px;
+    border-radius:10px;
+    font-weight:600;
+}
+
+/* SEARCH */
+
+.top-bar{
+    margin-bottom:25px;
+}
+
+#searchInput{
+    width:320px;
+    padding:14px 16px;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    font-size:15px;
+}
+
+/* TABLE */
+
+.table-card{
+    background:white;
+    border-radius:18px;
+    padding:24px;
+    overflow:auto;
+    box-shadow:0 4px 20px rgba(0,0,0,0.06);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+thead{
+    background:#1e3a5f;
+    color:white;
+}
+
+th{
+    padding:18px;
+    text-align:left;
+}
+
+td{
+    padding:18px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+/* BADGES */
+
+.course-badge{
+    background:#dbeafe;
+    color:#1d4ed8;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.semester-badge{
+    background:#dcfce7;
+    color:#15803d;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+}
+
+/* BUTTON */
+
+.add-btn{
+    background:#16a34a;
+    color:white;
+    text-decoration:none;
+    padding:10px 18px;
+    border-radius:10px;
+    font-weight:600;
+    display:inline-block;
+}
+
+.add-btn:hover{
+    background:#15803d;
+}
+
+/* EMPTY */
+
+.empty-row{
+    text-align:center;
+    padding:40px;
+    color:#6b7280;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    #searchInput{
+        width:100%;
+    }
+
+}

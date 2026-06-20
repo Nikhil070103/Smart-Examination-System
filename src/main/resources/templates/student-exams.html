@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <title>Available Exams</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/student-exams.css}">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- HEADER -->
+    <div class="header">
+
+        <div>
+
+            <h1>Available Exams</h1>
+
+            <p>
+                Attend live exams and
+                track exam status
+            </p>
+
+        </div>
+
+        <a href="/student/dashboard"
+           class="back-btn">
+
+            ← Dashboard
+
+        </a>
+
+    </div>
+
+    <!-- CARD -->
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+
+            <tr>
+
+                <th>Exam</th>
+                <th>Subject</th>
+                <th>Status</th>
+                <th>Action</th>
+
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            <tr th:each="exam : ${exams}">
+
+                <!-- EXAM -->
+                <td>
+
+                    <div class="exam-name"
+                         th:text="${exam.examName}">
+                    </div>
+
+                </td>
+
+                <!-- SUBJECT -->
+                <td>
+
+                    <span class="subject-badge"
+                          th:text="${exam.subject}">
+                    </span>
+
+                </td>
+
+                <!-- STATUS -->
+                <td>
+
+                    <!-- COMPLETED -->
+                    <span th:if="${submittedMap[exam.id]}"
+                          class="status completed">
+
+                        Completed
+
+                    </span>
+
+                    <!-- NOT SCHEDULED -->
+                    <span th:if="${!submittedMap[exam.id] and exam.startTime == null}"
+                          class="status notscheduled">
+
+                        Not Scheduled
+
+                    </span>
+
+                    <!-- UPCOMING -->
+                    <span th:if="${!submittedMap[exam.id]
+                    and exam.startTime != null
+                    and T(java.time.LocalDateTime).now().isBefore(exam.startTime)}"
+                          class="status upcoming">
+
+                        Upcoming
+
+                    </span>
+
+                    <!-- LIVE -->
+                    <span th:if="${!submittedMap[exam.id]
+                    and exam.startTime != null
+                    and exam.endTime != null
+                    and T(java.time.LocalDateTime).now().isAfter(exam.startTime)
+                    and T(java.time.LocalDateTime).now().isBefore(exam.endTime)}"
+                          class="status live">
+
+                        Live Now
+
+                    </span>
+
+                    <!-- EXPIRED -->
+                    <span th:if="${!submittedMap[exam.id]
+                    and exam.endTime != null
+                    and T(java.time.LocalDateTime).now().isAfter(exam.endTime)}"
+                          class="status expired">
+
+                        Expired
+
+                    </span>
+
+                </td>
+
+                <!-- ACTION -->
+                <td>
+
+                    <!-- COMPLETED -->
+                    <span th:if="${submittedMap[exam.id]}"
+                          class="btn disabled">
+
+                        Completed
+
+                    </span>
+
+                    <!-- START -->
+                    <a th:if="${!submittedMap[exam.id]
+                    and exam.startTime != null
+                    and exam.endTime != null
+                    and T(java.time.LocalDateTime).now().isAfter(exam.startTime)
+                    and T(java.time.LocalDateTime).now().isBefore(exam.endTime)}"
+
+                       th:href="@{/student/exams/{id}/start(id=${exam.id})}"
+
+                       class="btn start">
+
+                        Start Exam
+
+                    </a>
+
+                    <!-- NOT AVAILABLE -->
+                    <span th:if="${!submittedMap[exam.id]
+                    and (exam.startTime == null
+                    or T(java.time.LocalDateTime).now().isBefore(exam.startTime)
+                    or T(java.time.LocalDateTime).now().isAfter(exam.endTime))}"
+
+                          class="btn disabled">
+
+                        Not Available
+
+                    </span>
+
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

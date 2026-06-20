@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Exam Results</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/single-exam-results.css}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+
+        <div>
+
+            <h1 th:text="${exam.examName}">
+                Exam
+            </h1>
+
+            <p>
+
+                Subject:
+                <strong th:text="${exam.subject}"></strong>
+
+                |
+
+                Course:
+                <strong th:text="${exam.course}"></strong>
+
+                |
+
+                Semester:
+                <strong th:text="${exam.semester}"></strong>
+
+            </p>
+
+        </div>
+
+        <a href="/admin/results/exams"
+           class="back-btn">
+
+            ← Back
+
+        </a>
+
+    </div>
+
+    <!-- SEARCH -->
+    <div class="top-bar">
+
+        <input type="text"
+               id="searchInput"
+               placeholder="Search student...">
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-card">
+
+        <table id="resultTable">
+
+            <thead>
+
+            <tr>
+                <th>Rank</th>
+                <th>Student</th>
+                <th>Roll No</th>
+                <th>Score</th>
+                <th>Percentage</th>
+                <th>Status</th>
+            </tr>
+
+            </thead>
+
+		  <tbody>
+			
+			<tr th:if="${#lists.isEmpty(results)}">
+			
+			    <td colspan="6"
+			        class="empty-row">
+			
+			        No student has attempted
+			        this exam yet
+			
+			    </td>
+			
+			</tr>
+			
+			<tr th:each="r, stat : ${results}">
+			
+			    <td th:text="${stat.count}"></td>
+			
+			    <td th:text="${r.studentName}"></td>
+			
+			    <td th:text="${r.student.rollNumber}"></td>
+			
+			    <td th:text="${r.score}"></td>
+			
+			    <td>
+			
+			        <span th:text="${r.total != 0 ? (r.score * 100) / r.total + '%' : '0%'}"></span>
+			
+			    </td>
+			
+			   <td>
+
+				    <span th:if="${r.total != 0 and r.score >= (r.total / 2)}"
+				          class="pass">
+				        PASS
+				    </span>	
+				
+				    <span th:if="${r.total == 0 or r.score < (r.total / 2)}"
+				          class="fail">
+				        FAIL
+				    </span>
+				
+				</td>
+			
+			</tr>
+			
+			</tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+
+window.addEventListener("load", function(){
+
+    const search =
+        document.getElementById("searchInput");
+
+    const rows =
+        document.querySelectorAll(".result-row");
+
+    search.addEventListener("keyup", function(){
+
+        const value =
+            this.value.toLowerCase();
+
+        rows.forEach(row => {
+
+            const text =
+                row.innerText.toLowerCase();
+
+            row.style.display =
+                text.includes(value)
+                    ? ""
+                    : "none";
+
+        });
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>

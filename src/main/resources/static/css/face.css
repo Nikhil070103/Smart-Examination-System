@@ -1,0 +1,113 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #1f2937, #111827);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.face-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.face-card {
+    width: 420px;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(14px);
+    padding: 36px;
+    border-radius: 18px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+    text-align: center;
+    color: white;
+}
+
+.face-card h2 {
+    margin-bottom: 6px;
+}
+
+.subtitle {
+    font-size: 14px;
+    opacity: 0.85;
+    margin-bottom: 20px;
+}
+
+video {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+
+.instructions {
+    text-align: left;
+    font-size: 13px;
+    margin-bottom: 18px;
+    opacity: 0.9;
+}
+
+.instructions li {
+    margin-bottom: 6px;
+}
+
+.btn-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(79,70,229,0.5);
+}
+
+button.secondary {
+    background: rgba(255,255,255,0.2);
+}
+
+.note {
+    margin-top: 14px;
+    font-size: 12px;
+    opacity: 0.75;
+}
+
+/* Alerts */
+.alert {
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    font-size: 14px;
+}
+
+.alert.success {
+    background: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+}
+
+.alert.error {
+    background: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+}
+
+.hidden {
+    display: none;
+}

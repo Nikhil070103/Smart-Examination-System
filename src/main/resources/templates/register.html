@@ -37,13 +37,12 @@
             <label>Password</label>
         </div>
 
-        <div class="input-group">
-            <select th:field="*{role}">
-                <option value="STUDENT">Student</option>
-                <option value="ADMIN">Admin</option>
-            </select>
-            <label>Role</label>
-        </div>
+       <div class="input-group">
+		    <label>Role</label>
+		    <input type="text"
+		           value="Admin"
+		           readonly>
+		</div>
 
         <button type="submit">Register</button>
     </form>

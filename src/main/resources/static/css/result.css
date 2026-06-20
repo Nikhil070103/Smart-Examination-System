@@ -1,0 +1,190 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+
+    background:linear-gradient(
+        135deg,
+        #e0f2fe,
+        #f8fafc,
+        #dbeafe
+    );
+}
+
+.result-container{
+    width:100%;
+    max-width:750px;
+}
+
+.result-card{
+    background:#fff;
+    border-radius:25px;
+    padding:45px;
+    text-align:center;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,0.08);
+
+    animation:fadeIn 0.5s ease;
+}
+
+.result-icon{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    margin:0 auto 25px;
+    font-size:60px;
+    color:white;
+}
+
+.pass-icon{
+    background:linear-gradient(
+        135deg,
+        #22c55e,
+        #16a34a
+    );
+}
+
+.fail-icon{
+    background:linear-gradient(
+        135deg,
+        #ef4444,
+        #dc2626
+    );
+}
+
+.result-card h1{
+    font-size:42px;
+    color:#0f172a;
+    margin-bottom:12px;
+}
+
+.subtitle{
+    color:#64748b;
+    font-size:18px;
+    margin-bottom:35px;
+}
+
+.score-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    margin-bottom:30px;
+}
+
+.score-box{
+    background:#f8fafc;
+    border-radius:18px;
+    padding:25px;
+    border:1px solid #e2e8f0;
+}
+
+.score-box h3{
+    color:#64748b;
+    margin-bottom:10px;
+}
+
+.score-box p{
+    font-size:34px;
+    font-weight:700;
+    color:#0f172a;
+}
+
+.status-badge{
+    display:inline-block;
+    padding:12px 35px;
+    border-radius:50px;
+    font-size:18px;
+    font-weight:700;
+    margin-bottom:35px;
+}
+
+.pass-badge{
+    background:#dcfce7;
+    color:#15803d;
+}
+
+.fail-badge{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+.btn-group{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.dashboard-btn,
+.results-btn{
+    text-decoration:none;
+    padding:14px 28px;
+    border-radius:12px;
+    font-weight:600;
+    transition:0.3s ease;
+}
+
+.dashboard-btn{
+    background:#2563eb;
+    color:white;
+}
+
+.dashboard-btn:hover{
+    background:#1d4ed8;
+    transform:translateY(-2px);
+}
+
+.results-btn{
+    background:#f1f5f9;
+    color:#0f172a;
+}
+
+.results-btn:hover{
+    background:#e2e8f0;
+    transform:translateY(-2px);
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@media(max-width:768px){
+
+    .result-card{
+        padding:30px 20px;
+    }
+
+    .result-card h1{
+        font-size:30px;
+    }
+
+    .score-grid{
+        grid-template-columns:1fr;
+    }
+
+    .score-box p{
+        font-size:28px;
+    }
+}

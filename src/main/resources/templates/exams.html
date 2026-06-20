@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Exams</title>
+    <link rel="stylesheet" th:href="@{/css/exams.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div>
+            <h2>All Exams</h2>
+            <p>View, manage and track exam status</p>
+        </div>
+
+        <a href="/admin/exams/create" class="create-btn">
+            + Create Exam
+        </a>
+    </div>
+
+    <!-- SEARCH + FILTER -->
+    <div class="top-bar">
+
+        <input type="text"
+               id="searchInput"
+               placeholder="Search exam or subject...">
+
+        <div class="filter-box">
+
+    <button class="filter-btn active"
+            data-filter="all">
+        All
+    </button>
+
+    <button class="filter-btn"
+            data-filter="upcoming">
+        Upcoming
+    </button>
+
+    <button class="filter-btn"
+            data-filter="live">
+        Live
+    </button>
+
+    <button class="filter-btn"
+            data-filter="completed">
+        Completed
+    </button>
+
+    <button class="filter-btn"
+            data-filter="not scheduled">
+        Not Scheduled
+    </button>
+
+</div>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-card">
+        <table id="examTable">
+            <thead>
+            <tr>
+                <th>Exam</th>
+                <th>Subject</th>
+                <th>Questions</th>
+				<th>Course</th>
+				<th>Semester</th>
+				<th>Duration</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <!-- EMPTY -->
+            <tr th:if="${#lists.isEmpty(exams)}">
+                <td colspan="7" class="empty-state">
+                    <h3>No exams available</h3>
+                    <p>Create your first exam 🚀</p>
+                </td>
+            </tr>
+
+            <!-- LOOP -->
+            <tr th:each="exam : ${exams}" class="exam-row">
+
+               <td th:text="${exam.examName}"></td>
+
+				<td th:text="${exam.subject}"></td>
+				
+				<td th:text="${questionCountMap[exam.id]}"></td>
+				
+				<td th:text="${exam.course}"></td>
+				
+				<td>
+				    <span class="semester-badge"
+				          th:text="${exam.semester + ' Sem'}">
+				    </span>
+				</td>
+				
+				<td th:text="${exam.duration + ' Min'}"></td>
+				
+				<td th:text="${exam.startTime}"></td>
+				
+				<td th:text="${exam.endTime}"></td>
+
+                <!-- STATUS -->
+                <td>
+                    <span th:if="${exam.startTime == null}"
+                          class="status gray">
+                        Not Scheduled
+                    </span>
+
+                    <span th:if="${exam.startTime != null and T(java.time.LocalDateTime).now().isBefore(exam.startTime)}"
+                          class="status blue">
+                        Upcoming
+                    </span>
+
+                    <span th:if="${exam.startTime != null and exam.endTime != null
+                                  and T(java.time.LocalDateTime).now().isAfter(exam.startTime)
+                                  and T(java.time.LocalDateTime).now().isBefore(exam.endTime)}"
+                          class="status green">
+                        Live
+                    </span>
+
+                    <span th:if="${exam.endTime != null and T(java.time.LocalDateTime).now().isAfter(exam.endTime)}"
+                          class="status red">
+                        Completed
+                    </span>
+                </td>
+
+                <!-- ACTION -->
+                <td class="action-box">
+
+                    <a th:href="@{/admin/exams/edit/{id}(id=${exam.id})}"
+                       class="btn edit">
+                        Edit
+                    </a>
+
+                    <a th:href="@{/admin/questions}"
+                       class="btn question">
+                        Questions
+                    </a>
+
+                    <a th:if="${exam.endTime == null or
+                               T(java.time.LocalDateTime).now().isAfter(exam.endTime) or
+                               T(java.time.LocalDateTime).now().isBefore(exam.startTime)}"
+                       th:href="@{/admin/exams/delete/{id}(id=${exam.id})}"
+                       class="btn delete"
+                       onclick="return confirm('Delete this exam?')">
+                        Delete
+                    </a>
+
+                    <span th:if="${exam.startTime != null and exam.endTime != null and
+                                  T(java.time.LocalDateTime).now().isAfter(exam.startTime) and
+                                  T(java.time.LocalDateTime).now().isBefore(exam.endTime)}"
+                          class="btn disabled">
+                        Live
+                    </span>
+
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <!-- BACK -->
+    <a href="/admin/manage-exams" class="back-link">
+        ← Back to Manage Exams
+    </a>
+
+</div>
+
+<script>
+window.addEventListener("load", function () {
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const rows =
+        document.querySelectorAll(".exam-row");
+
+    const buttons =
+        document.querySelectorAll(".filter-btn");
+
+    let currentFilter = "all";
+
+    // SEARCH + FILTER
+    function updateTable() {
+
+        const searchValue =
+            searchInput.value.toLowerCase();
+
+        rows.forEach(row => {
+
+           const examText =
+  				  row.innerText.toLowerCase();
+            const status =
+                row.querySelector(".status")
+                   .innerText
+                   .trim()
+                   .toLowerCase();
+
+           const matchesSearch =
+  			  examText.includes(searchValue);
+
+            const matchesFilter =
+                currentFilter === "all" ||
+                status === currentFilter;
+
+            row.style.display =
+                (matchesSearch && matchesFilter)
+                    ? ""
+                    : "none";
+        });
+    }
+
+    // SEARCH
+    searchInput.addEventListener(
+        "keyup",
+        updateTable
+    );
+
+    // FILTER BUTTONS
+    buttons.forEach(btn => {
+
+        btn.addEventListener("click", function () {
+
+            buttons.forEach(b =>
+                b.classList.remove("active")
+            );
+
+            this.classList.add("active");
+
+            currentFilter =
+                this.dataset.filter.toLowerCase();
+
+            updateTable();
+        });
+
+    });
+
+    updateTable();
+
+});
+</script>
+</body>
+</html>

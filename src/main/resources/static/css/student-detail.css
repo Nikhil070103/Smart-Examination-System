@@ -1,0 +1,187 @@
+@charset "ISO-8859-1";*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+    color:#1f2937;
+}
+
+.page-container{
+    width:92%;
+    max-width:1300px;
+    margin:30px auto;
+}
+
+/* HEADER */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.header h1{
+    font-size:30px;
+    color:#1e3a5f;
+}
+
+.header p{
+    color:#6b7280;
+    margin-top:5px;
+}
+
+.admin-email{
+    background:white;
+    padding:12px 18px;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+    font-weight:600;
+    color:#1e3a5f;
+}
+
+/* TOP CARD */
+.profile-card{
+    background:white;
+    padding:30px;
+    border-radius:14px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    display:flex;
+    gap:20px;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.avatar{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:#1e3a5f;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:34px;
+    font-weight:700;
+}
+
+.student-info h2{
+    color:#1e3a5f;
+    margin-bottom:5px;
+}
+
+.student-info p{
+    color:#6b7280;
+}
+
+/* STATUS */
+.status{
+    display:inline-block;
+    margin-top:10px;
+    padding:8px 14px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.active{
+    background:#dcfce7;
+    color:#15803d;
+}
+
+.pending{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+/* GRID */
+.detail-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:14px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.card h3{
+    color:#1e3a5f;
+    margin-bottom:20px;
+}
+
+/* INFO */
+.info-box{
+    margin-bottom:18px;
+}
+
+label{
+    font-size:13px;
+    color:#6b7280;
+}
+
+.info-box p{
+    font-size:16px;
+    font-weight:600;
+    margin-top:5px;
+}
+
+/* BUTTONS */
+.btn-group{
+    display:flex;
+    gap:15px;
+    margin-top:25px;
+}
+
+.edit-btn,
+.back-btn{
+    padding:12px 20px;
+    text-decoration:none;
+    border-radius:8px;
+    color:white;
+    font-weight:600;
+}
+
+.edit-btn{
+    background:#16a34a;
+}
+
+.back-btn{
+    background:#1e3a5f;
+}
+
+.edit-btn:hover{
+    background:#15803d;
+}
+
+.back-btn:hover{
+    background:#2c527e;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+    .detail-grid{
+        grid-template-columns:1fr;
+    }
+
+    .header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .profile-card{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .btn-group{
+        flex-direction:column;
+    }
+}

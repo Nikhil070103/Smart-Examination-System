@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Exam</title>
+    <link rel="stylesheet" th:href="@{/css/select-exam.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+
+        <div>
+            <h2>Select Exam</h2>
+            <p>Add questions to specific exams</p>
+        </div>
+
+        <a href="/admin/manage-exams"
+           class="back-btn">
+            ← Back
+        </a>
+
+    </div>
+
+    <!-- SEARCH -->
+    <div class="top-bar">
+
+        <input type="text"
+               id="searchInput"
+               placeholder="Search exam, subject, course...">
+
+    </div>
+
+    <!-- TABLE CARD -->
+    <div class="table-card">
+
+        <table id="examTable">
+
+            <thead>
+            <tr>
+                <th>Exam</th>
+                <th>Subject</th>
+                <th>Course</th>
+                <th>Semester</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <!-- EMPTY -->
+            <tr th:if="${#lists.isEmpty(exams)}">
+
+                <td colspan="5" class="empty-row">
+
+                    <h3>No Exams Found</h3>
+                    <p>Create exams first</p>
+
+                </td>
+
+            </tr>
+
+            <!-- LOOP -->
+            <tr th:each="exam : ${exams}"
+                class="exam-row">
+
+                <td th:text="${exam.examName}"></td>
+
+                <td th:text="${exam.subject}"></td>
+
+                <td>
+                    <span class="course-badge"
+                          th:text="${exam.course}">
+                    </span>
+                </td>
+
+                <td>
+                    <span class="semester-badge"
+                          th:text="${exam.semester + ' Sem'}">
+                    </span>
+                </td>
+
+                <td>
+
+                    <a th:href="@{/admin/{id}/questions/add(id=${exam.id})}"
+                       class="btn add-btn">
+
+                        + Add Question
+
+                    </a>
+
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+
+window.addEventListener("load", function () {
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const rows =
+        document.querySelectorAll(".exam-row");
+
+    searchInput.addEventListener("keyup", function () {
+
+        const value =
+            this.value.toLowerCase();
+
+        rows.forEach(row => {
+
+            const text =
+                row.innerText.toLowerCase();
+
+            row.style.display =
+                text.includes(value)
+                    ? ""
+                    : "none";
+
+        });
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>

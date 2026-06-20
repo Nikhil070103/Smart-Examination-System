@@ -10,17 +10,12 @@
     <h2>Smart Examination System</h2>
     <p class="subtitle">Login to continue</p>
 
-    <!-- ================= ALERTS ================= -->
-
+    <!-- ALERTS -->
     <div th:if="${message}" class="alert success" th:text="${message}"></div>
     <div th:if="${error}" class="alert error" th:text="${error}"></div>
-    <div th:if="${warning}" class="alert warning" th:text="${warning}"></div>
-    <div th:if="${info}" class="alert info" th:text="${info}"></div>
 
-    <!-- ================= LOGIN FORM ================= -->
-
+    <!-- EMAIL + PASSWORD LOGIN -->
     <form th:action="@{/login}" method="post">
-
         <div class="input-group">
             <input type="email" name="email" required>
             <label>Email</label>
@@ -34,11 +29,120 @@
         <button type="submit">Login</button>
     </form>
 
-    <p class="register-link">
-        New user? <a th:href="@{/register}">Create account</a>
-    </p>
+    <div style="margin:18px 0; font-size:13px; color:#6b7280;">
+        — OR —
+    </div>
+
+    <!-- FACE LOGIN EMAIL -->
+    <div class="input-group">
+        <input type="email" id="faceEmail" required>
+        <label>Email for Face Login</label>
+    </div>
+
+    <!-- FACE LOGIN -->
+    <button type="button"
+            onclick="startFaceLogin()"
+            class="face-btn">
+        Login with Face
+    </button>
+
+   <!-- <p class="register-link">
+        <a th:href="@{/register}">Forget Password</a>
+    </p> -->
 </div>
- 
+
+<!-- FACE LOGIN SCRIPT -->
+<script>
+async function startFaceLogin() {
+
+    const email = document.getElementById("faceEmail").value;
+
+    if (!email) {
+        alert("Enter email first");
+        return;
+    }
+
+    try {
+        // camera
+        const stream =
+            await navigator.mediaDevices.getUserMedia({
+                video: true
+            });
+
+        const video = document.createElement("video");
+        video.srcObject = stream;
+        await video.play();
+
+        // capture
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(video, 0, 0);
+
+        // stop camera
+        stream.getTracks().forEach(track => track.stop());
+
+        canvas.toBlob(async (blob) => {
+
+            try {
+                const formData = new FormData();
+                formData.append("image", blob);
+                formData.append("email", email);
+
+                const response = await fetch(
+                    "http://127.0.0.1:5000/face-login",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+                const result = await response.json();
+
+                console.log(result);
+
+                if (result.status === "MATCH") {
+
+                    localStorage.setItem(
+                        "studentEmail",
+                        result.email
+                    );
+
+                    window.location.href =
+                        "/face-login-success?email=" +
+                        result.email;
+
+                } else if (result.status === "USER_NOT_FOUND") {
+                    alert("User not found");
+
+                } else if (result.status === "NO_FACE") {
+                    alert("No face detected");
+
+                } else if (result.status === "MULTIPLE_FACES") {
+                    alert("Multiple faces detected");
+
+                } else if (result.status === "NO_MATCH") {
+                    alert("Face not matched with this email");
+
+                } else {
+                    alert("Face login failed");
+                }
+
+            } catch (err) {
+                console.error(err);
+                alert("Flask server not running");
+            }
+
+        }, "image/jpeg");
+
+    } catch (err) {
+        console.error(err);
+        alert("Camera access denied");
+    }
+}
+</script>
 
 </body>
 </html>

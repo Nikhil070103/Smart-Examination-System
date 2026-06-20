@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Face Registration</title>
+    <link rel="stylesheet" th:href="@{/css/face-status.css}">
+</head>
+<body>
+
+<div class="page-container">
+
+    <div class="header">
+        <h1>Face Registration</h1>
+        <p>Register pending student faces</p>
+    </div>
+
+    <div class="student-grid">
+
+        <div class="student-card"
+             th:each="s : ${students}">
+
+            <h3 th:text="${s.name}">Student</h3>
+            <p th:text="${s.rollNumber}">101</p>
+            <p th:text="${s.course}">MCA</p>
+
+            <a th:href="@{/admin/students/edit/{id}(id=${s.id})}"
+               class="register-btn">
+                Register Face
+            </a>
+        </div>
+
+    </div>
+
+    <div class="back-wrap">
+        <a href="/admin/students"
+           class="back-btn">
+            ← Back
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

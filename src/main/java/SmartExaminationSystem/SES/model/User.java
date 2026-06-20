@@ -1,6 +1,8 @@
 package SmartExaminationSystem.SES.model;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -34,6 +36,11 @@ public class User {
 
     @Column(unique=true)
     private String adminApprovalToken;
+    
+    @Column(length = 6)
+    private String otp;
+
+    private LocalDateTime otpExpiry;
 
     // Constructors, getters, setters
 
@@ -65,4 +72,20 @@ public class User {
 
     public String getAdminApprovalToken() { return adminApprovalToken; }
     public void setAdminApprovalToken(String adminApprovalToken) { this.adminApprovalToken = adminApprovalToken; }
+    
+    public String getOtp() {
+		return otp;
+	}
+
+	public void setOtp(String otp) {
+		this.otp = otp;
+	}
+
+	public LocalDateTime getOtpExpiry() {
+		return otpExpiry;
+	}
+
+	public void setOtpExpiry(LocalDateTime otpExpiry) {
+		this.otpExpiry = otpExpiry;
+	}
 }

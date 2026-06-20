@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Notifications</title>
+    <link rel="stylesheet" th:href="@{/css/student-dashboard.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        .main-content{
+            margin-left: 0 !important;
+            width: 90% !important;
+            max-width: 1200px;
+            margin: 40px auto !important;
+            padding: 20px;
+        }
+
+        .header{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-content">
+
+    <!-- Header -->
+    <div class="header">
+        <div>
+            <h1>Notifications 🔔</h1>
+            <p>Student Alerts & Important Updates</p>
+        </div>
+
+        <!-- Clickable Avatar -->
+    <a href="/student/profile" class="profile-box">
+
+        <div class="avatar"
+             th:text="${#strings.substring(student.name,0,1)}">
+            S
+        </div>
+
+    </a>
+    </div>
+
+    <!-- Notifications Card -->
+    <div class="table-card">
+        <h2>Latest Notifications</h2>
+
+        <!-- If notifications exist -->
+        <div th:if="${notifications != null and !notifications.isEmpty()}">
+
+            <div class="mini-card"
+                 th:each="n : ${notifications}">
+                <h4 th:text="${n.title}">Exam Alert</h4>
+                <p th:text="${n.message}">
+                    New exam has been scheduled.
+                </p>
+                <small th:text="${n.createdAt}">
+                    Date
+                </small>
+            </div>
+
+        </div>
+
+        <!-- If no notifications -->
+        <div th:if="${notifications == null or notifications.isEmpty()}">
+            <div class="mini-card">
+                <h4>No Notifications</h4>
+                <p>You have no new notifications.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="panel-card" style="margin-top:25px;">
+        <h2>Quick Actions</h2>
+
+        <button onclick="location.href='/student/dashboard'">
+            Back to Dashboard
+        </button>
+
+        <button onclick="location.href='/student/student-exams'">
+            View Exams
+        </button>
+
+        <button onclick="location.href='/student/my-results'">
+            My Results
+        </button>
+    </div>
+
+</div>
+
+</body>
+</html>

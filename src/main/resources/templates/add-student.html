@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Student</title>
+    <link rel="stylesheet" th:href="@{/css/add-student.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<div class="page-container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>Add New Student</h1>
+        <p>Create student account and register face</p>
+    </div>
+
+    <!-- ALERTS -->
+    <div th:if="${errorMessage}" class="error-alert">
+        <p th:text="${errorMessage}">Error message</p>
+    </div>
+
+    <div th:if="${successMessage}" id="successAlert" class="success-alert">
+        <p th:text="${successMessage}">Success message</p>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="form-card">
+
+        <form action="/admin/students/add"
+              method="post"
+              
+
+            <!-- PERSONAL -->
+            <h3>👤 Personal Details</h3>
+
+            <div class="form-grid">
+
+                <div class="input-box">
+                    <label>Full Name</label>
+                    <input type="text" name="name" required>
+                </div>
+
+                <div class="input-box">
+                    <label>Father Name</label>
+                    <input type="text" name="fatherName" required>
+                </div>
+
+                <div class="input-box">
+                    <label>Date of Birth</label>
+                    <input type="date" name="dob" required>
+                </div>
+
+                <div class="input-box">
+                    <label>Gender</label>
+                    <select name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- CONTACT -->
+            <h3>📞 Contact Details</h3>
+
+            <div class="form-grid">
+
+                <div class="input-box">
+                    <label>Mobile Number</label>
+                    <input type="tel"
+                           id="mobile"
+                           name="mobile"
+                           maxlength="10"
+                           required>
+                    <small id="mobileMsg" class="field-msg"></small>
+                </div>
+
+                <div class="input-box">
+                    <label>Address</label>
+                    <input type="text"
+                           name="address"
+                           required>
+                </div>
+
+            </div>
+
+            <!-- LOGIN -->
+            <h3>🔐 Login Details</h3>
+
+            <div class="form-grid">
+
+                <div class="input-box">
+                    <label>Email</label>
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           required>
+                    <small id="emailMsg" class="field-msg"></small>
+                </div>
+
+                <div class="input-box">
+                    <label>Password</label>
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           required>
+                    <small id="passwordMsg" class="field-msg"></small>
+                </div>
+
+            </div>
+
+            <!-- ACADEMIC -->
+            <h3>🎓 Academic Details</h3>
+
+            <div class="form-grid">
+
+                <div class="input-box">
+                    <label>Roll Number</label>
+                    <input type="text"
+                           name="rollNumber"
+                           required>
+                </div>
+
+                <div class="input-box">
+                    <label>Enrollment Number</label>
+                    <input type="text"
+                           name="enrollmentNumber"
+                           required>
+                </div>
+
+                <div class="input-box">
+                    <label>Course</label>
+                    <select name="course" required>
+                        <option value="">Select Course</option>
+                        <option>BCA</option>
+                        <option>MCA</option>
+                        <option>BSc CS</option>
+                        <option>MSc CS</option>
+                    </select>
+                </div>
+
+                <div class="input-box">
+                    <label>Branch</label>
+                    <input type="text"
+                           name="branch"
+                           required>
+                </div>
+
+                <div class="input-box">
+                    <label>Semester</label>
+                    <select name="semester" required>
+                        <option value="">Select Semester</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                    </select>
+                </div>
+
+                <div class="input-box">
+                    <label>Section</label>
+                    <input type="text"
+                           name="section"
+                           required>
+                </div>
+
+                <div class="input-box full-width">
+                    <label>Session</label>
+                    <input type="text"
+                           name="session"
+                           placeholder="2023-2025"
+                           required>
+                </div>
+
+            </div>
+
+            <!-- FACE CAPTURE -->
+            <h3>📷 Face Capture</h3>
+
+            <div class="camera-box">
+
+                <video id="video"
+                       autoplay
+                       playsinline
+                       style="display:none;"></video>
+
+                <img id="preview"
+                     style="display:none;">
+
+                <canvas id="canvas"
+                        style="display:none;"></canvas>
+
+                <input type="hidden"
+                       id="capturedImage"
+                       name="capturedImage">
+
+                <p class="camera-note">
+                    Face capture optional (if skipped → Pending Face Registration)
+                </p>
+
+                <button type="button"
+				        id="captureBtn"
+				        class="camera-btn">
+				    Start Camera
+				</button>
+
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="btn-group">
+
+                <button type="submit"
+                        class="save-btn">
+                    Add Student
+                </button>
+
+                <a href="/admin/dashboard"
+                   class="back-btn">
+                    ⬅ Back Dashboard
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+		<script>
+		let stream = null;
+		let captured = false;
+		
+		async function startCamera() {
+		    const video = document.getElementById("video");
+		    const preview = document.getElementById("preview");
+		    const btn = document.getElementById("captureBtn");
+		
+		    // stop old stream first
+		    if (stream) {
+		        stream.getTracks().forEach(track => track.stop());
+		        stream = null;
+		    }
+		
+		    try {
+		        stream = await navigator.mediaDevices.getUserMedia({
+		            video: true
+		        });
+		
+		        video.srcObject = stream;
+		        await video.play();
+		
+		        video.style.display = "block";
+		        preview.style.display = "none";
+		
+		        captured = false;
+		        btn.innerText = "Capture Photo";
+		
+		    } catch (e) {
+		        alert("Camera not accessible");
+		        console.log(e);
+		    }
+		}
+		
+		function capturePhoto() {
+		    const video = document.getElementById("video");
+		    const canvas = document.getElementById("canvas");
+		    const preview = document.getElementById("preview");
+		    const hidden = document.getElementById("capturedImage");
+		    const btn = document.getElementById("captureBtn");
+		
+		    if (!video.videoWidth) {
+		        alert("Camera loading...");
+		        return;
+		    }
+		
+		    canvas.width = video.videoWidth;
+		    canvas.height = video.videoHeight;
+		
+		    const ctx = canvas.getContext("2d");
+		    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+		
+		    const image = canvas.toDataURL("image/png");
+		
+		    preview.src = image;
+		    preview.style.display = "block";
+		    video.style.display = "none";
+		
+		    hidden.value = image;
+		
+		    if (stream) {
+		        stream.getTracks().forEach(track => track.stop());
+		        stream = null;
+		    }
+		
+		    captured = true;
+		    btn.innerText = "Retake Photo";
+		}
+		
+		document.getElementById("captureBtn")
+		.addEventListener("click", function () {
+		    const video = document.getElementById("video");
+		
+		    if (!stream) {
+		        startCamera();
+		        return;
+		    }
+		
+		    if (!captured && video.style.display !== "none") {
+		        capturePhoto();
+		        return;
+		    }
+		
+		    startCamera();
+		});
+		</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Top Performers</title>
+<link rel="stylesheet" th:href="@{/css/results-table.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <h2>Top Performers</h2>
+
+    <table>
+
+        <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Student</th>
+            <th>Exam</th>
+            <th>Score</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr th:each="r, stat : ${toppers}">
+
+            <td th:text="${stat.count}"></td>
+
+            <td th:text="${r.studentName}"></td>
+
+            <td th:text="${r.exam.examName}"></td>
+
+            <td th:text="${r.score}"></td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+    <a href="/admin/results">⬅ Back</a>
+
+</div>
+
+</body>
+</html>

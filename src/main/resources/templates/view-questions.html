@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Questions</title>
+    <link rel="stylesheet" th:href="@{/css/view-questions.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div>
+            <h2>Questions List</h2>
+            <p>
+                Total Questions:
+                <strong th:text="${#lists.size(questions)}"></strong>
+            </p>
+        </div>
+
+        <input type="text"
+               id="searchInput"
+               placeholder="Search question...">
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-card">
+        <table id="questionTable">
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Option A</th>
+                    <th>Option B</th>
+                    <th>Option C</th>
+                    <th>Option D</th>
+                    <th>Correct</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <!-- EMPTY -->
+                <tr th:if="${#lists.isEmpty(questions)}">
+                    <td colspan="7" class="empty-row">
+                        No questions added yet
+                    </td>
+                </tr>
+
+                <!-- LOOP -->
+                <tr th:each="q : ${questions}" class="question-row">
+
+                    <td th:text="${q.questionTitle}"></td>
+                    <td th:text="${q.optionA}"></td>
+                    <td th:text="${q.optionB}"></td>
+                    <td th:text="${q.optionC}"></td>
+                    <td th:text="${q.optionD}"></td>
+
+                    <td>
+                        <span class="correct-badge"
+                              th:text="${q.correctAnswer}">
+                        </span>
+                    </td>
+
+                    <td class="action-box">
+
+                        <!-- EDIT -->
+                        <a th:href="@{/admin/questions/edit/{qid}/{eid}(qid=${q.id},eid=${examId})}"
+                           class="btn edit">
+                            Edit
+                        </a>
+
+                        <!-- DELETE -->
+                        <a th:href="@{/admin/questions/delete/{qid}/{eid}(qid=${q.id},eid=${examId})}"
+                           class="btn delete"
+                           onclick="return confirm('Delete this question?')">
+                            Delete
+                        </a>
+
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <!-- BOTTOM ACTIONS -->
+    <div class="bottom-bar">
+
+        <a th:href="@{/admin/{id}/questions/add(id=${examId})}"
+           class="btn add">
+            + Add More Questions
+        </a>
+
+        <a href="/admin/exams"
+           class="back-link">
+            ← Back to Exams
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const rows =
+        document.querySelectorAll(".question-row");
+
+    searchInput.addEventListener(
+        "keyup",
+        function () {
+            const value =
+                this.value.toLowerCase();
+
+            rows.forEach(row => {
+                const text =
+                    row.innerText.toLowerCase();
+
+                row.style.display =
+                    text.includes(value)
+                        ? ""
+                        : "none";
+            });
+        }
+    );
+</script>
+
+</body>
+</html>

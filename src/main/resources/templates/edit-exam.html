@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Exam</title>
+    <link rel="stylesheet" th:href="@{/css/edit-exam.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h2>Edit Exam</h2>
+        <p>Update exam details</p>
+    </div>
+
+    <form th:action="@{/admin/exams/update/{id}(id=${exam.id})}"
+          th:object="${exam}"
+          method="post">
+
+        <div class="grid">
+
+            <div class="input-box">
+                <label>Exam Name</label>
+                <input type="text"
+                       th:field="*{examName}"
+                       required>
+            </div>
+
+            <div class="input-box">
+                <label>Subject</label>
+                <input type="text"
+                       th:field="*{subject}"
+                       required>
+            </div>
+
+            <div class="input-box">
+                <label>Course</label>
+                <select th:field="*{course}" required>
+                    <option value="">-- Select Course --</option>
+                    <option value="BCA">BCA</option>
+                    <option value="MCA">MCA</option>
+                    <option value="BSc CS">BSc CS</option>
+                    <option value="MSc CS">MSc CS</option>
+                </select>
+            </div>
+
+            <div class="input-box">
+                <label>Semester</label>
+                <select th:field="*{semester}" required>
+                    <option value="">-- Select Semester --</option>
+                    <option value="1">1st Sem</option>
+                    <option value="2">2nd Sem</option>
+                    <option value="3">3rd Sem</option>
+                    <option value="4">4th Sem</option>
+                    <option value="5">5th Sem</option>
+                    <option value="6">6th Sem</option>
+                </select>
+            </div>
+			<div class="input-box">
+            <label>Duration (Minutes)</label>
+			<input type="number"
+			       th:field="*{duration}"
+			       id="duration"
+			       required>
+			</div>
+	            <div class="input-box">
+                <label>Total Marks</label>
+                <input type="number"
+                       th:field="*{totalMarks}"
+                       required>
+            </div>
+			<div class="input-box">
+           <label>Start Time</label>
+				<input type="datetime-local"
+				       th:field="*{startTime}"
+				       id="startTime">
+	       </div>
+			<div class="input-box">
+				<label>End Time</label>
+				<input type="datetime-local"
+				       th:field="*{endTime}"
+				       id="endTime"
+				       readonly>
+			</div>
+        </div>
+
+        <button type="submit">
+            Update Exam
+        </button>
+    </form>
+
+    <a href="/admin/exams" class="back-link">
+        ← Back to Exams
+    </a>
+
+</div>
+<script>
+    const durationInput =
+        document.getElementById("duration");
+
+    const startInput =
+        document.getElementById("startTime");
+
+    const endInput =
+        document.getElementById("endTime");
+
+    function calculateEndTime() {
+        const duration =
+            parseInt(durationInput.value);
+
+        const start =
+            startInput.value;
+
+        if (!duration || !start) return;
+
+        const startDate =
+            new Date(start);
+
+        startDate.setMinutes(
+            startDate.getMinutes() + duration
+        );
+
+        const year = startDate.getFullYear();
+        const month = String(
+            startDate.getMonth() + 1
+        ).padStart(2, "0");
+
+        const day = String(
+            startDate.getDate()
+        ).padStart(2, "0");
+
+        const hours = String(
+            startDate.getHours()
+        ).padStart(2, "0");
+
+        const mins = String(
+            startDate.getMinutes()
+        ).padStart(2, "0");
+
+        endInput.value =
+            `${year}-${month}-${day}T${hours}:${mins}`;
+    }
+
+    // When duration changes
+    durationInput.addEventListener(
+        "input",
+        calculateEndTime
+    );
+
+    // When start time changes
+    startInput.addEventListener(
+        "change",
+        calculateEndTime
+    );
+
+    // ADD HERE (last line inside script)
+    window.addEventListener(
+        "load",
+        calculateEndTime
+    );
+    window.addEventListener("load", calculateEndTime);
+</script>
+</body>
+</html>

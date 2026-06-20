@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Exam Wise Results</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/exam-wise-results.css}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+
+        <div>
+            <h1>Exam Wise Results</h1>
+            <p>
+                Track exam performance,
+                topper & statistics
+            </p>
+        </div>
+
+        <a href="/admin/results"
+           class="back-btn">
+
+            ← Back
+
+        </a>
+
+    </div>
+
+    <!-- SEARCH -->
+    <div class="top-bar">
+
+        <input type="text"
+               id="searchInput"
+               placeholder="Search exam or subject...">
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-card">
+
+        <table id="resultTable">
+
+            <thead>
+
+            <tr>
+                <th>Exam</th>
+                <th>Subject</th>
+                <th>Course</th>
+                <th>Semester</th>
+                <th>Duration</th>
+                <th>Result Count</th>
+                <th>Total Marks</th>
+                <th>Action</th>
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            <!-- EMPTY -->
+            <tr th:if="${#lists.isEmpty(exams)}">
+
+                <td colspan="7"
+                    class="empty-row">
+
+                    <h3>No Results Found</h3>
+
+                </td>
+
+            </tr>
+
+            <!-- LOOP -->
+            <tr th:each="exam : ${exams}"
+                class="exam-row">
+
+                <td th:text="${exam.examName}"></td>
+
+                <td th:text="${exam.subject}"></td>
+                
+                
+                <td>
+                    <span class="course-badge"
+                          th:text="${exam.course}">
+                    </span>
+                </td>
+
+                <td>
+                    <span class="sem-badge"
+                          th:text="${exam.semester + ' Sem'}">
+                    </span>
+                </td>
+
+                <td th:text="${exam.duration + ' Min'}"></td>
+                
+                 
+				<td>
+				   <span th:text="${resultCountMap[exam.id]}"></span>
+				</td>
+
+
+                <td th:text="${exam.totalMarks}"></td>
+
+                <td>
+
+                    <a th:href="@{/admin/results/exam/{id}(id=${exam.id})}"
+                       class="btn">
+
+                        View Results
+
+                    </a>
+
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+
+window.addEventListener("load", function(){
+
+    const search =
+        document.getElementById("searchInput");
+
+    const rows =
+        document.querySelectorAll(".exam-row");
+
+    search.addEventListener("keyup", function(){
+
+        const value =
+            this.value.toLowerCase();
+
+        rows.forEach(row => {
+
+            const text =
+                row.innerText.toLowerCase();
+
+            row.style.display =
+                text.includes(value)
+                    ? ""
+                    : "none";
+
+        });
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>

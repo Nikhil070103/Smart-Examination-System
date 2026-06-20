@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Question</title>
+    <link rel="stylesheet" th:href="@{/css/add-question.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- TOP -->
+    <div class="top-bar">
+
+        <div>
+            <h2 th:text="'Add Question - ' + ${exam.examName}"></h2>
+
+            <p class="count">
+                Total Questions:
+                <strong th:text="${questionCount}"></strong>
+            </p>
+        </div>
+
+        <div class="actions">
+
+            <a th:href="@{/admin/{id}/questions(id=${examId})}"
+               class="btn view">
+                View Questions
+            </a>
+
+            <a th:href="@{/admin/exams}"
+               class="btn back">
+                Back
+            </a>
+
+        </div>
+    </div>
+
+    <!-- ERROR -->
+    <div th:if="${error}" class="error-box"
+         th:text="${error}">
+    </div>
+
+    <!-- FORM -->
+    <form th:action="@{/admin/{id}/questions/add(id=${examId})}"
+          th:object="${question}"
+          method="post">
+
+        <!-- Question -->
+        <label>Question</label>
+        <textarea th:field="*{questionTitle}"
+                  rows="3"
+                  required>
+        </textarea>
+
+        <!-- Options -->
+        <div class="option-grid">
+
+            <div class="input-box">
+                <label>Option A</label>
+                <input type="text"
+                       th:field="*{optionA}"
+                       required>
+            </div>
+
+            <div class="input-box">
+                <label>Option B</label>
+                <input type="text"
+                       th:field="*{optionB}"
+                       required>
+            </div>
+
+            <div class="input-box">
+                <label>Option C</label>
+                <input type="text"
+                       th:field="*{optionC}"
+                       required>
+            </div>
+
+            <div class="input-box">
+                <label>Option D</label>
+                <input type="text"
+                       th:field="*{optionD}"
+                       required>
+            </div>
+
+        </div>
+
+        <!-- Correct -->
+        <label>Correct Answer</label>
+        <select th:field="*{correctAnswer}">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+        </select>
+
+        <!-- BUTTONS -->
+        <div class="btn-wrap">
+            <button type="submit">
+                Save Question
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+</html>

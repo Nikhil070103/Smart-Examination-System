@@ -1,0 +1,64 @@
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background:#eef2f7;
+}
+
+.update-container{
+    width:90%;
+    max-width:650px;
+    margin:40px auto;
+    background:white;
+    padding:35px;
+    border-radius:14px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.08);
+}
+
+h2{
+    text-align:center;
+    color:#1e3c72;
+    margin-bottom:25px;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    color:#475569;
+    font-size:14px;
+}
+
+input,textarea{
+    width:100%;
+    padding:12px;
+    margin-top:6px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    box-sizing:border-box;
+}
+
+textarea{
+    resize:none;
+}
+
+.btn-group{
+    display:flex;
+    gap:15px;
+    margin-top:25px;
+}
+
+.save-btn{
+    background:#10b981;
+    color:white;
+    border:none;
+    padding:12px 18px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.cancel-btn{
+    background:#1e3c72;
+    color:white;
+    padding:12px 18px;
+    text-decoration:none;
+    border-radius:8px;
+}

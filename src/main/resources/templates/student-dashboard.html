@@ -2,31 +2,234 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Student Dashboard</title>
-    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/student-dashboard.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
-<div class="dashboard-container">
-    <h1>Student Dashboard</h1>
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+    <div class="logo-section">
+        <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+        <h2 class="logo">SES</h2>
+    </div>
 
-    <div class="card-container">
-        <div class="card" onclick="location.href='/student/profile'">
-            <h3>My Profile</h3>
+    <ul class="nav-links">
+        <li class="active" onclick="location.href='/student/dashboard'">
+            <span>🏠</span>
+            <p>Dashboard</p>
+        </li>
+
+        <li onclick="location.href='/student/profile'">
+            <span>👤</span>
+            <p>My Profile</p>
+        </li>
+
+        <li onclick="location.href='/student/student-exams'">
+            <span>📝</span>
+            <p>My Exams</p>
+        </li>
+
+        <li onclick="location.href='/student/my-results'">
+            <span>📊</span>
+            <p>My Results</p>
+        </li>
+
+       <li onclick="location.href='/student/notifications'">
+		    <span>🔔</span>
+		    <p>Notifications</p>
+		</li>
+
+        <li onclick="location.href='/logout'">
+            <span>🚪</span>
+            <p>Logout</p>
+        </li>
+    </ul>
+</div>
+
+<!-- Main Content -->
+<div class="main-content" id="mainContent">
+
+   <!-- Header -->
+<div class="header">
+    <div>
+        <h1>Welcome Back 👋</h1>
+        <p>Smart Examination System Dashboard</p>
+    </div>
+
+    <!-- Clickable Avatar -->
+    <a href="/student/profile" class="profile-box">
+
+        <div class="avatar"
+             th:text="${#strings.substring(student.name,0,1)}">
+            S
         </div>
 
-        <div class="card" onclick="location.href='/student/exams'">
-            <h3>View Exams</h3>
+    </a>
+</div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+
+        <div class="card">
+            <h3>Total Exams</h3>
+            <h2 th:text="${totalExams}">0</h2>
         </div>
 
-        <div class="card" onclick="location.href='/student/results'">
-            <h3>My Results</h3>
+        <div class="card">
+            <h3>Completed Exams</h3>
+            <h2 th:text="${completedExams}">0</h2>
         </div>
 
-        <div class="card" onclick="location.href='/logout'">
-            <h3>Logout</h3>
+        <div class="card">
+            <h3>Upcoming Exams</h3>
+            <h2 th:text="${upcomingExams}">0</h2>
         </div>
+
+        <div class="card">
+            <h3>Average Score</h3>
+            <h2 th:text="${averageScore + '%'}">0%</h2>
+        </div>
+
+    </div>
+
+    <!-- Content Grid -->
+<div class="dashboard-grid">
+
+    <!-- Recent Results -->
+    <div class="table-card">
+
+        <h2>Recent Results</h2>
+
+        <!-- SCROLLABLE AREA -->
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Exam</th>
+                        <th>Score</th>
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr th:each="r : ${results}">
+
+                        <!-- EXAM -->
+                        <td th:text="${r.exam.examName}">
+                            Java Test
+                        </td>
+
+                        <!-- SCORE -->
+                        <td th:text="${r.score + '/' + r.total}">
+                            10/20
+                        </td>
+
+                        <!-- STATUS -->
+                        <td>
+
+                            <!-- PASS -->
+                            <span th:if="${r.total != 0 and ((r.score * 100) / r.total) >= 40}"
+
+                                  class="pass-badge">
+
+                                Pass
+
+                            </span>
+
+                            <!-- FAIL -->
+                            <span th:if="${r.total == 0 or ((r.score * 100) / r.total) < 40}"
+
+                                  class="fail-badge">
+
+                                Fail
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+        <!-- Upcoming Exams -->
+        <div class="panel-card">
+    <h2>Upcoming Exams</h2>
+
+    <div th:if="${#lists.isEmpty(upcomingExamList)}">
+        <p>No upcoming exams</p>
+    </div>
+
+    <div th:each="exam : ${upcomingExamList}"
+         th:if="${exam.startTime != null and exam.startTime.isAfter(T(java.time.LocalDateTime).now())}"
+         class="exam-item">
+
+        <h4 th:text="${exam.examName}"></h4>
+        <p th:text="${exam.subject}"></p>
+        <small th:text="${#temporals.format(exam.startTime,'dd MMM yyyy hh:mm a')}"></small>
     </div>
 </div>
+
+        <!-- Exam Readiness -->
+      <div class="panel-card">
+    <h2>Latest Notifications</h2>
+
+    <div class="notify-list">
+
+        <div th:if="${#lists.isEmpty(notifications)}"
+             class="notify-item info">
+            <span>🔔</span>
+            <p>No notifications available</p>
+        </div>
+
+        <div th:each="exam : ${notifications}"
+             class="notify-item warning">
+            <span>📅</span>
+            <p th:text="${exam.examName + ' is upcoming'}"></p>
+        </div>
+
+    </div>
+</div>
+
+        <!-- Quick Actions -->
+        <div class="panel-card">
+            <h2>Quick Actions</h2>
+
+            <button onclick="location.href='/student/student-exams'">
+                Start Exam
+            </button>
+
+            <button onclick="location.href='/student/my-results'">
+                View Results
+            </button>
+
+            <button onclick="location.href='/student/profile/edit'">
+                Update Profile
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("collapsed");
+    document.getElementById("mainContent").classList.toggle("expanded");
+}
+</script>
 
 </body>
 </html>

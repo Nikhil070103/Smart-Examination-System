@@ -1,8 +1,11 @@
 package SmartExaminationSystem.SES.service;
 
+import java.util.Random;
 import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import SmartExaminationSystem.SES.model.User;
 import SmartExaminationSystem.SES.repository.UserRepository;
 
@@ -18,49 +21,44 @@ public class UserService {
     // ================= REGISTER =================
     public void registerUser(User user) {
 
-        // If email exists but not verified → allow re-register
         userRepository.findByEmail(user.getEmail()).ifPresent(existing -> {
-            if (Boolean.TRUE.equals(existing.getEmailVerified())) {
-                throw new RuntimeException("Email already registered");
-            } else {
-                userRepository.delete(existing); // cleanup old unverified entry
-            }
+            throw new RuntimeException("Email already registered");
         });
 
-        user.setEmailVerified(false);
-        user.setAdminApproved(false);
-        user.setVerificationToken(UUID.randomUUID().toString());
+        String otp = String.format("%06d",
+                new Random().nextInt(1000000));
 
-        if ("ADMIN".equalsIgnoreCase(user.getRole())) {
-            user.setAdminApprovalToken(UUID.randomUUID().toString());
-        }
+        user.setRole("ADMIN");
+        user.setEmailVerified(true);
+        user.setAdminApproved(false);
+
+        user.setOtp(otp);
 
         User savedUser = userRepository.save(user);
 
-        // Send email verification
-        emailService.sendVerificationEmail(
-                savedUser.getEmail(),
-                savedUser.getVerificationToken()
-        );
-
-        // Notify super admin if ADMIN
-        if ("ADMIN".equalsIgnoreCase(savedUser.getRole())) {
-            emailService.notifySuperAdmin(
+        emailService.sendAdminApprovalOtp(
                 savedUser.getEmail(),
                 savedUser.getUsername(),
-                savedUser.getAdminApprovalToken()
-            );
-        }
+                otp
+        );
     }
 
     // ================= VERIFY EMAIL =================
-    public boolean verifyEmail(String token) {
+    public boolean verifyOtp(String email, String otp) {
 
-        User user = userRepository.findByVerificationToken(token).orElse(null);
-        if (user == null) return false;
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        if (user == null) {
+            return false;
+        }
+
+        if (!otp.equals(user.getOtp())) {
+            return false;
+        }
 
         user.setEmailVerified(true);
-        user.setVerificationToken(null);
+        user.setOtp(null);
+
         userRepository.save(user);
 
         return true;
@@ -72,12 +70,15 @@ public class UserService {
         User user = userRepository.findByEmail(email).orElse(null);
         if (user == null) return null;
 
-        if (!user.getEmailVerified()) {
-            throw new RuntimeException("Please verify your email");
-        }
+//        if (!user.getEmailVerified()) {
+//            throw new RuntimeException("Please verify your email first");
+//        }
 
-        if ("ADMIN".equalsIgnoreCase(user.getRole()) && !user.getAdminApproved()) {
-            throw new RuntimeException("Admin approval pending");
+        if ("ADMIN".equalsIgnoreCase(user.getRole())
+                && !user.getAdminApproved()) {
+
+            throw new RuntimeException(
+                    "Waiting for Super Admin approval");
         }
 
         if (user.getPassword().equals(password)) {
@@ -96,6 +97,35 @@ public class UserService {
         admin.setAdminApproved(true);
         admin.setAdminApprovalToken(null);
         userRepository.save(admin);
+
+        return true;
+    }
+
+    // ================= FACE LOGIN SUPPORT =================
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
+    
+    public boolean approveAdminByOtp(
+            String email,
+            String otp) {
+
+        User user =
+                userRepository.findByEmail(email)
+                        .orElse(null);
+
+        if (user == null) {
+            return false;
+        }
+
+        if (!otp.equals(user.getOtp())) {
+            return false;
+        }
+
+        user.setAdminApproved(true);
+        user.setOtp(null);
+
+        userRepository.save(user);
 
         return true;
     }

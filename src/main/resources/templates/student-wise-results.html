@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Student Wise Results</title>
+
+<link rel="stylesheet"
+      th:href="@{/css/results-table.css}">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <div>
+            <h2>Student Wise Results</h2>
+            <p>Search and track student performance</p>
+        </div>
+
+        <input type="text"
+               id="searchInput"
+               placeholder="Search student...">
+
+    </div>
+
+    <table>
+
+        <thead>
+        <tr>
+
+            <th>Student</th>
+            <th>Exam</th>
+            <th>Score</th>
+            <th>Total</th>
+            <th>Percentage</th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr th:if="${#lists.isEmpty(results)}">
+
+            <td colspan="5"
+                class="empty-row">
+
+                No Results Found
+
+            </td>
+
+        </tr>
+
+        <tr th:each="r : ${results}">
+
+            <td th:text="${r.studentName}"></td>
+
+            <td th:text="${r.exam.examName}"></td>
+
+            <td th:text="${r.score}"></td>
+
+            <td th:text="${r.exam.totalMarks}"></td>
+
+			<td>
+			
+			    <span th:if="${r.exam.totalMarks > 0}"
+			          th:text="${(r.score * 100) / r.exam.totalMarks + '%'}">
+			    </span>
+			
+			    <span th:if="${r.exam.totalMarks == 0}">
+			        0%
+			    </span>
+			
+			</td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+    <a href="/admin/results"
+   class="back-btn">
+    ← Back
+</a>
+
+</div>
+
+<script>
+
+window.addEventListener("load", function(){
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    searchInput.addEventListener(
+        "keyup",
+        function(){
+
+            const value =
+                this.value.toLowerCase();
+
+            const rows =
+                document.querySelectorAll("tbody tr");
+
+            rows.forEach(row => {
+
+                row.style.display =
+                    row.innerText.toLowerCase()
+                    .includes(value)
+                    ? ""
+                    : "none";
+
+            });
+
+        }
+    );
+
+});
+
+</script>
+
+</body>
+</html>

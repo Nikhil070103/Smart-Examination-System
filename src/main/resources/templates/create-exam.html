@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Exam</title>
+    <link rel="stylesheet" th:href="@{/css/create-exam.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<div class="exam-container">
+    <h2>Create New Exam</h2>
+    <p class="sub-text">Create exam for specific course & semester</p>
+
+    <form class="exam-form"
+          th:action="@{/admin/exams/create}"
+          th:object="${exam}"
+          method="post">
+
+        <div class="grid">
+
+            <div class="input-box">
+                <label>Exam Name</label>
+                <input type="text" th:field="*{examName}" required>
+            </div>
+
+            <div class="input-box">
+                <label>Subject</label>
+                <input type="text" th:field="*{subject}" required>
+            </div>
+
+            <div class="input-box">
+                <label>Total Marks</label>
+                <input type="number" th:field="*{totalMarks}" required>
+            </div>
+            
+			<div class="input-box">
+            <label>Duration (Minutes)</label>
+				<input type="number"
+				       th:field="*{duration}"
+				       id="duration"
+				       required>
+			</div>
+			
+            <div class="input-box">
+                <label>Course</label>
+                <select th:field="*{course}" required>
+                    <option value="">-- Select Course --</option>
+                    <option value="BCA">BCA</option>
+                    <option value="MCA">MCA</option>
+                    <option value="BSc CS">BSc CS</option>
+                    <option value="MSc CS">MSc CS</option>
+                </select>
+            </div>
+
+            <div class="input-box">
+                <label>Semester</label>
+                <select th:field="*{semester}" required>
+                    <option value="">-- Select Semester --</option>
+                    <option value="1">1st Sem</option>
+                    <option value="2">2nd Sem</option>
+                    <option value="3">3rd Sem</option>
+                    <option value="4">4th Sem</option>
+                    <option value="5">5th Sem</option>
+                    <option value="6">6th Sem</option>
+                </select>
+            </div>
+			<div class="input-box">
+            <label>Start Time</label>
+				<input type="datetime-local"
+				       th:field="*{startTime}"
+				       id="startTime">
+			</div>
+			'
+			<div class="input-box">
+           <label>End Time</label>
+				<input type="datetime-local"
+				       th:field="*{endTime}"
+				       id="endTime"
+				       readonly>
+			</div>  
+        </div>
+
+        <!-- ERROR -->
+        <div class="error-box"
+             th:if="${error}"
+             th:text="${error}">
+        </div>
+
+        <button type="submit">Create Exam</button>
+    </form>
+
+    <a href="/admin/manage-exams" class="back-link">
+        ← Back to Manage Exams
+    </a>
+</div>
+
+<script>
+    const durationInput =
+        document.getElementById("duration");
+
+    const startInput =
+        document.getElementById("startTime");
+
+    const endInput =
+        document.getElementById("endTime");
+
+    function calculateEndTime() {
+        const duration =
+            parseInt(durationInput.value);
+
+        const start =
+            startInput.value;
+
+        if (!duration || !start) return;
+
+        const startDate =
+            new Date(start);
+
+        startDate.setMinutes(
+            startDate.getMinutes() + duration
+        );
+
+        // convert format yyyy-MM-ddTHH:mm
+        const year = startDate.getFullYear();
+        const month = String(
+            startDate.getMonth() + 1
+        ).padStart(2, "0");
+
+        const day = String(
+            startDate.getDate()
+        ).padStart(2, "0");
+
+        const hours = String(
+            startDate.getHours()
+        ).padStart(2, "0");
+
+        const mins = String(
+            startDate.getMinutes()
+        ).padStart(2, "0");
+
+        endInput.value =
+            `${year}-${month}-${day}T${hours}:${mins}`;
+    }
+
+    durationInput.addEventListener(
+        "input",
+        calculateEndTime
+    );
+
+    startInput.addEventListener(
+        "change",
+        calculateEndTime
+    );
+    window.addEventListener("load", calculateEndTime);
+</script>
+
+</body>
+</html>

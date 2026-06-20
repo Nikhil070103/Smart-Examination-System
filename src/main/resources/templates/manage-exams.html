@@ -1,38 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Manage Exams</title>
-    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/manage-exams.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
 <div class="dashboard-container">
-    <h2>Manage Exams</h2>
 
+    <!-- Header -->
+    <div class="header">
+        <h1>Manage Exams</h1>
+        <p>Create, update, view and manage examinations</p>
+    </div>
+
+    <!-- Cards -->
     <div class="card-container">
-        <div class="card">
+
+        <!-- CREATE -->
+        <div class="card"
+             onclick="location.href='/admin/exams/create'">
+            <div class="icon">📝</div>
             <h3>Create Exam</h3>
-            <p>Add new exam</p>
+            <p>Create new examination</p>
         </div>
 
-        <div class="card">
-            <h3>Add Questions</h3>
-            <p>MCQs & descriptive</p>
-        </div>
-
-        <div class="card">
+        <!-- VIEW -->
+        <div class="card"
+             onclick="location.href='/admin/exams'">
+            <div class="icon">📋</div>
             <h3>View Exams</h3>
             <p>All created exams</p>
         </div>
 
-        <div class="card">
-            <h3>Delete Exam</h3>
-            <p>Remove exam</p>
+        <!-- ADD QUESTIONS -->
+        <div class="card"
+             onclick="location.href='/admin/questions'">
+            <div class="icon">❓</div>
+            <h3>Add Questions</h3>
+            <p>Select exam & add MCQs</p>
         </div>
+
+        
+
     </div>
 
-    <br>
-    <a href="/admin/dashboard">⬅ Back to Dashboard</a>
+    <!-- Fancy Back Button -->
+    <div class="back-wrap">
+        <a href="/admin/dashboard" class="back-btn">
+            ← Back Dashboard
+        </a>
+    </div>
+
 </div>
 
 </body>

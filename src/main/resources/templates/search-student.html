@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search Student</title>
+</head>
+<body>
+
+<h2>Search Student</h2>
+
+<form method="get" action="/admin/students/list">
+    <input type="text" name="keyword"
+           placeholder="Enter Roll No or Name">
+    <button type="submit">Search</button>
+</form>
+
+<a href="/admin/students">Back</a>
+
+</body>
+</html>

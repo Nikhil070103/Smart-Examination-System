@@ -1,38 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Manage Students</title>
-    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/manage-students.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
-<div class="dashboard-container">
-    <h2>Manage Students</h2>
+<div class="page-container">
 
-    <div class="card-container">
-        <div class="card">
-            <h3>Add Student</h3>
-            <p>Create new student account</p>
-        </div>
-
-        <div class="card">
-            <h3>View Students</h3>
-            <p>See all registered students</p>
-        </div>
-
-        <div class="card">
-            <h3>Update Student</h3>
-            <p>Edit student details</p>
-        </div>
-
-        <div class="card">
-            <h3>Delete Student</h3>
-            <p>Remove student account</p>
-        </div>
+    <!-- HEADER -->
+    <div class="header">
+        <h1>Manage Students</h1>
+        <p>Add, update and manage student records</p>
     </div>
 
-    <br>
-    <a href="/admin/dashboard">⬅ Back to Dashboard</a>
+    <!-- STATS -->
+    <div class="stats-grid">
+
+        <!-- Total Students -->
+        <div class="stat-card">
+            <h3>Total Students</h3>
+            <h2 th:text="${totalStudents}">0</h2>
+        </div>
+
+        <!-- Pending Face Registration -->
+        <div class="stat-card">
+            <h3>Pending Face Registration</h3>
+            <h2 th:text="${pendingFaceCount}">0</h2>
+        </div>
+
+    </div>
+
+    <!-- ACTION CARDS -->
+    <div class="card-grid">
+
+        <!-- ADD STUDENT -->
+        <a href="/admin/students/add" class="card">
+            <div class="icon">➕</div>
+            <h3>Add Student</h3>
+            <p>Create new student account</p>
+        </a>
+
+        <!-- VIEW STUDENTS -->
+        <a href="/admin/students/list" class="card">
+            <div class="icon">👨</div>
+            <h3>View Students</h3>
+            <p>Search, filter, edit & delete records</p>
+        </a>
+
+        <!-- FACE REGISTRATION -->
+        <a href="/admin/students/face-status" class="card">
+            <div class="icon">📷</div>
+            <h3>Face Registration</h3>
+            <p>Capture & manage pending faces</p>
+        </a>
+
+    </div>
+
+    <!-- BACK BUTTON -->
+    <div class="back-wrap">
+        <a href="/admin/dashboard" class="back-btn">
+            ⬅ Back to Dashboard
+        </a>
+    </div>
+
 </div>
 
 </body>

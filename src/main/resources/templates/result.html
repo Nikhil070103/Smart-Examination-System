@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>Exam Result</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/result.css}">
+
+</head>
+
+<body>
+
+<div class="result-container">
+
+    <!-- RESULT CARD -->
+    <div class="result-card">
+
+        <!-- ICON -->
+        <div class="result-icon"
+
+             th:classappend="${percentage >= 40} ? 'pass-icon' : 'fail-icon'">
+
+            <span th:if="${percentage >= 40}">
+                ✓
+            </span>
+
+            <span th:if="${percentage < 40}">
+                ✕
+            </span>
+
+        </div>
+
+        <!-- TITLE -->
+        <h1 th:if="${percentage >= 40}">
+            Congratulations!
+        </h1>
+
+        <h1 th:if="${percentage < 40}">
+            Better Luck Next Time
+        </h1>
+
+        <!-- SUBTITLE -->
+        <p class="subtitle">
+
+            Your exam has been submitted successfully
+
+        </p>
+
+        <!-- SCORE BOX -->
+        <div class="score-grid">
+
+            <div class="score-box">
+
+                <h3>Score</h3>
+
+                <p th:text="${score + ' / ' + total}">
+                    0 / 4
+                </p>
+
+            </div>
+
+            <div class="score-box">
+
+                <h3>Percentage</h3>
+
+                <p th:text="${percentage + '%'}">
+                    0%
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- STATUS -->
+        <div class="status-badge"
+
+             th:classappend="${percentage >= 40} ? 'pass-badge' : 'fail-badge'">
+
+            <span th:if="${percentage >= 40}">
+                PASS
+            </span>
+
+            <span th:if="${percentage < 40}">
+                FAIL
+            </span>
+
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="btn-group">
+
+            <a href="/student/dashboard"
+               class="dashboard-btn">
+
+                Dashboard
+
+            </a>
+
+            <a href="/student/my-results"
+               class="results-btn">
+
+                View Results
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

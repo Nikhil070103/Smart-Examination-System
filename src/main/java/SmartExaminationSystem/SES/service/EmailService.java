@@ -50,4 +50,40 @@ public class EmailService {
 
         mailSender.send(msg);
     }
+    
+    public void sendOtpEmail(String to, String otp) {
+
+        SimpleMailMessage msg = new SimpleMailMessage();
+
+        msg.setTo(to);
+        msg.setSubject("SES Verification OTP");
+
+        msg.setText(
+                "Your OTP is: " + otp +
+                "\n\nOTP is valid for 10 minutes."
+        );
+
+        mailSender.send(msg);
+    }
+    
+    public void sendAdminApprovalOtp(
+            String adminEmail,
+            String username,
+            String otp) {
+
+        SimpleMailMessage msg = new SimpleMailMessage();
+
+        msg.setTo(superAdminEmail);
+
+        msg.setSubject("New Admin Approval Required");
+
+        msg.setText(
+                "New Admin Registration\n\n" +
+                "Username: " + username + "\n" +
+                "Email: " + adminEmail + "\n\n" +
+                "Approval OTP: " + otp
+        );
+
+        mailSender.send(msg);
+    }
 }

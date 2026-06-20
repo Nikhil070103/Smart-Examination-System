@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Student</title>
+    <link rel="stylesheet" th:href="@{/css/edit-student.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<div class="page-container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div>
+            <h1>Edit Student</h1>
+            <p>Update student information</p>
+        </div>
+
+        <div class="admin-email">
+            <span th:text="${student.user.email}">
+                admin@gmail.com
+            </span>
+        </div>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="form-card">
+
+        <form th:action="@{/admin/students/update/{id}(id=${student.id})}"
+    	  method="post">
+	      
+
+            <div class="form-grid">
+
+                <!-- Name -->
+                <div class="input-box">
+                    <label>Name</label>
+                    <input type="text"
+                           name="name"
+                           th:value="${student.name}"
+                           required>
+                </div>
+
+                <!-- Father Name -->
+                <div class="input-box">
+                    <label>Father Name</label>
+                    <input type="text"
+                           name="fatherName"
+                           th:value="${student.fatherName}">
+                </div>
+
+                <!-- Mobile -->
+                <div class="input-box">
+                    <label>Mobile</label>
+                    <input type="text"
+                           name="mobile"
+                           th:value="${student.mobile}"
+                           pattern="[0-9]{10}"
+                           maxlength="10"
+                           required>
+                </div>
+
+                <!-- Address -->
+                <div class="input-box full-width">
+                    <label>Address</label>
+                    <textarea name="address"
+                              rows="3"
+                              th:text="${student.address}"></textarea>
+                </div>
+
+                <!-- Course -->
+                <div class="input-box">
+                    <label>Course</label>
+                    <input type="text"
+                           name="course"
+                           th:value="${student.course}">
+                </div>
+
+                <!-- Branch -->
+                <div class="input-box">
+                    <label>Branch</label>
+                    <input type="text"
+                           name="branch"
+                           th:value="${student.branch}">
+                </div>
+
+                <!-- Semester -->
+                <div class="input-box">
+                    <label>Semester</label>
+                    <input type="text"
+                           name="semester"
+                           th:value="${student.semester}">
+                </div>
+
+                <!-- Section -->
+                <div class="input-box">
+                    <label>Section</label>
+                    <input type="text"
+                           name="section"
+                           th:value="${student.section}">
+                </div>
+
+                <!-- LOCKED -->
+                <div class="input-box">
+                    <label>Roll Number</label>
+                    <input type="text"
+                           th:value="${student.rollNumber}"
+                           disabled>
+                </div>
+
+                <div class="input-box">
+                    <label>Enrollment Number</label>
+                    <input type="text"
+                           th:value="${student.enrollmentNumber}"
+                           disabled>
+                </div>
+
+                <div class="input-box">
+                    <label>Email</label>
+                    <input type="text"
+                           th:value="${student.user.email}"
+                           disabled>
+                </div>
+
+                <div class="input-box">
+                    <label>Role</label>
+                    <input type="text"
+                           th:value="${student.user.role}"
+                           disabled>
+                </div>
+
+            </div>
+            
+            <!-- FACE IMAGE -->
+			<div class="input-box full-width">
+			    <label>Face Registration</label>
+			
+						   <div class="face-section">
+
+    <span th:if="${student.faceImage == null}" class="status pending">
+        Face Pending
+    </span>
+
+    <span th:if="${student.faceImage != null}" class="status active">
+        Face Registered
+    </span>
+
+    <video id="video"
+           autoplay
+           playsinline
+           muted
+           style="display:none;"
+           width="320"
+           height="240"></video>
+
+    <img id="preview"
+         style="display:none;"
+         width="320"
+         height="240">
+
+    <canvas id="canvas" style="display:none;"></canvas>
+
+    <input type="hidden"
+           id="capturedImage"
+           name="capturedImage">
+
+    <button type="button" id="openBtn">
+        Open Camera
+    </button>
+
+    <button type="button"
+            id="captureBtn"
+            style="display:none;">
+        Take Photo
+    </button>
+</div>
+			</div>
+            <!-- BUTTONS -->
+            <div class="btn-group">
+
+                <button type="submit"
+                        class="save-btn">
+                    Update Student
+                </button>
+
+                <a href="/admin/students/list"
+                   class="back-btn">
+                    Back to Students
+                </a>
+
+            </div>
+
+        </form>
+    </div>
+
+</div>
+		<script>
+let stream = null;
+
+const video = document.getElementById("video");
+const preview = document.getElementById("preview");
+const canvas = document.getElementById("canvas");
+const hiddenInput = document.getElementById("capturedImage");
+
+const openBtn = document.getElementById("openBtn");
+const captureBtn = document.getElementById("captureBtn");
+
+// OPEN CAMERA
+openBtn.addEventListener("click", async () => {
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: true
+        });
+
+        video.srcObject = stream;
+
+        // IMPORTANT
+        await video.play();
+
+        video.style.display = "block";
+        preview.style.display = "none";
+
+        openBtn.style.display = "none";
+        captureBtn.style.display = "inline-block";
+
+    } catch (err) {
+        console.log(err);
+        alert("Camera access denied");
+    }
+});
+
+// CAPTURE
+captureBtn.addEventListener("click", () => {
+
+    if (!video.videoWidth) {
+        alert("Camera not loaded");
+        return;
+    }
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0);
+
+    const imageData = canvas.toDataURL("image/jpeg");
+
+    // save to spring
+    hiddenInput.value = imageData;
+
+    // replace live video with clicked image
+    preview.src = imageData;
+    preview.style.display = "block";
+
+    video.style.display = "none";
+
+    // stop camera
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+    }
+
+    captureBtn.style.display = "none";
+    openBtn.style.display = "inline-block";
+    openBtn.innerText = "Retake Photo";
+});
+</script>
+</body>
+</html>

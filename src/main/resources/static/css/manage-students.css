@@ -1,0 +1,154 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+    color:#1f2937;
+}
+
+.page-container{
+    width:92%;
+    max-width:1200px;
+    margin:40px auto;
+}
+
+/* HEADER */
+.header{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.header h1{
+    font-size:48px;
+    color:#1e3a5f;
+    font-weight:700;
+}
+
+.header p{
+    margin-top:10px;
+    color:#6b7280;
+    font-size:18px;
+}
+
+/* STATS */
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:25px;
+    margin-bottom:40px;
+}
+
+.stat-card{
+    background:white;
+    padding:30px;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+    transition:0.3s ease;
+}
+
+.stat-card:hover{
+    transform:translateY(-4px);
+}
+
+.stat-card h3{
+    color:#64748b;
+    font-size:22px;
+    margin-bottom:15px;
+}
+
+.stat-card h2{
+    font-size:48px;
+    color:#1e3a5f;
+    font-weight:700;
+}
+
+/* ACTION CARDS */
+.card-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:28px;
+}
+
+.card{
+    background:white;
+    padding:40px 25px;
+    border-radius:22px;
+    text-align:center;
+    text-decoration:none;
+    color:#1f2937;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+    border-left:5px solid #1e3a5f;
+    transition:0.3s ease;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 12px 24px rgba(0,0,0,0.12);
+}
+
+.icon{
+    font-size:42px;
+    margin-bottom:18px;
+}
+
+.card h3{
+    font-size:22px;
+    color:#1e3a5f;
+    margin-bottom:10px;
+    font-weight:700;
+}
+
+.card p{
+    color:#6b7280;
+    font-size:16px;
+    line-height:1.5;
+}
+
+/* BACK BUTTON */
+.back-wrap{
+    display:flex;
+    justify-content:center;
+    margin-top:45px;
+}
+
+.back-btn{
+    background:linear-gradient(135deg,#1e3a5f,#2563eb);
+    color:white;
+    text-decoration:none;
+    padding:14px 30px;
+    border-radius:35px;
+    font-size:16px;
+    font-weight:600;
+    box-shadow:0 10px 20px rgba(37,99,235,0.25);
+    transition:0.3s ease;
+}
+
+.back-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 14px 24px rgba(37,99,235,0.35);
+}
+
+/* MOBILE */
+@media(max-width:900px){
+
+    .stats-grid{
+        grid-template-columns:1fr;
+    }
+
+    .card-grid{
+        grid-template-columns:1fr;
+    }
+
+    .header h1{
+        font-size:36px;
+    }
+
+    .stat-card h2{
+        font-size:36px;
+    }
+}

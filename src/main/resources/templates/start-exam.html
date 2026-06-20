@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Start Exam</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/start-exam.css}">
+</head>
+
+<body>
+
+<!-- TIMER -->
+<div class="timer-box">
+
+    ⏰ <span id="timer"></span>
+
+</div>
+
+<div class="main-layout">
+
+    <!-- LEFT SIDE -->
+    <div class="exam-container">
+
+        <!-- HEADER -->
+        <div class="exam-header">
+
+            <div>
+                <h1>Online Examination</h1>
+
+                <p>
+                    Complete all questions carefully
+                </p>
+            </div>
+
+            <div class="secure-box">
+
+                🔒 AI Protected Exam
+
+            </div>
+
+        </div>
+
+        <!-- WARNING -->
+        <div id="warningBox"
+             class="warning"
+             style="display:none;">
+
+        </div>
+
+        <!-- FORM -->
+        <form th:action="@{/student/exams/submit}"
+              method="post">
+
+            <input type="hidden"
+                   name="examId"
+                   th:value="${examId}">
+
+            <!-- QUESTIONS -->
+            <div th:each="q, i : ${questions}"
+                 class="question-card">
+
+                <div class="question-top">
+
+                    <h3>
+                        Question
+                        <span th:text="${i.index + 1}">
+                        </span>
+                    </h3>
+
+                    <div class="mark-box">
+
+                        1 Mark
+
+                    </div>
+
+                </div>
+
+                <p class="question-title"
+                   th:text="${q.questionTitle}">
+                </p>
+
+                <!-- OPTION A -->
+                <label class="option">
+
+                    <input type="radio"
+                           th:name="${q.id}"
+                           value="A">
+
+                    <span th:text="${q.optionA}"></span>
+
+                </label>
+
+                <!-- OPTION B -->
+                <label class="option">
+
+                    <input type="radio"
+                           th:name="${q.id}"
+                           value="B">
+
+                    <span th:text="${q.optionB}"></span>
+
+                </label>
+
+                <!-- OPTION C -->
+                <label class="option">
+
+                    <input type="radio"
+                           th:name="${q.id}"
+                           value="C">
+
+                    <span th:text="${q.optionC}"></span>
+
+                </label>
+
+                <!-- OPTION D -->
+                <label class="option">
+
+                    <input type="radio"
+                           th:name="${q.id}"
+                           value="D">
+
+                    <span th:text="${q.optionD}"></span>
+
+                </label>
+
+            </div>
+
+            <!-- SUBMIT -->
+            <div class="submit-wrap">
+
+                <button type="submit"
+                        class="submit-btn">
+
+                    Submit Exam
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="sidebar">
+
+        <!-- CAMERA -->
+        <div class="camera-box">
+
+            <h3>Live Monitoring</h3>
+
+            <video id="video"
+                   autoplay
+                   muted>
+
+            </video>
+
+            <canvas id="canvas"
+                    style="display:none;">
+            </canvas>
+
+            <p id="faceWarning"
+               class="camera-status">
+
+                ✅ Face Monitoring Active
+
+            </p>
+
+        </div>
+
+        <!-- INSTRUCTIONS -->
+        <div class="instruction-box">
+
+            <h3>Instructions</h3>
+
+            <ul>
+
+                <li>
+                    Do not switch tabs
+                </li>
+
+                <li>
+                    Keep face visible
+                </li>
+
+                <li>
+                    Webcam must remain ON
+                </li>
+
+                <li>
+                    Exam auto submits on violation
+                </li>
+
+                <li>
+                    Timer cannot be paused
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- TIMER -->
+<script th:inline="javascript">
+
+let time =
+/*[[${remainingTime}]]*/ 0;
+
+const timerDisplay =
+document.getElementById("timer");
+
+const countdown =
+setInterval(() => {
+
+    let minutes =
+        Math.floor(time / 60);
+
+    let seconds =
+        time % 60;
+
+    timerDisplay.innerHTML =
+        minutes + ":" +
+        (seconds < 10 ? "0" : "")
+        + seconds;
+
+    time--;
+
+    if (time < 0) {
+
+        clearInterval(countdown);
+
+        alert("Time is up!");
+
+        document.querySelector("form")
+        .submit();
+
+    }
+
+}, 1000);
+
+</script>
+
+<!-- TAB SWITCH -->
+<script>
+
+let tabWarnings = 0;
+
+const maxTabWarnings = 3;
+
+const warningBox =
+document.getElementById("warningBox");
+
+document.addEventListener(
+"visibilitychange",
+function () {
+
+    if (document.hidden) {
+
+        tabWarnings++;
+
+        warningBox.style.display =
+        "block";
+
+        warningBox.innerText =
+            "⚠ Tab switch detected ("
+            + tabWarnings +
+            "/" +
+            maxTabWarnings +
+            ")";
+
+        if (
+            tabWarnings >=
+            maxTabWarnings
+        ) {
+
+            alert(
+            "Too many violations"
+            );
+
+            document
+            .querySelector("form")
+            .submit();
+        }
+    }
+});
+
+</script>
+
+<!-- FACE MONITOR -->
+<script>
+
+const video =
+document.getElementById("video");
+
+const canvas =
+document.getElementById("canvas");
+
+const ctx =
+canvas.getContext("2d");
+
+canvas.width = 640;
+canvas.height = 480;
+
+const studentEmail =
+localStorage.getItem(
+"studentEmail"
+);
+
+let faceWarnings = 0;
+
+const maxFaceWarnings = 3;
+
+navigator.mediaDevices
+.getUserMedia({ video: true })
+
+.then(stream => {
+
+    video.srcObject = stream;
+
+})
+
+.catch(() => {
+
+    document
+    .getElementById("faceWarning")
+    .innerText =
+    "❌ Camera access denied";
+
+});
+
+setInterval(() => {
+
+    if (video.readyState !== 4)
+        return;
+
+    ctx.drawImage(
+        video,
+        0,
+        0,
+        640,
+        480
+    );
+
+    canvas.toBlob(async (blob) => {
+
+        try {
+
+            const formData =
+            new FormData();
+
+            formData.append(
+                "image",
+                blob
+            );
+
+            formData.append(
+                "email",
+                studentEmail
+            );
+
+            const response =
+            await fetch(
+            "http://127.0.0.1:5000/check-face",
+            {
+                method:"POST",
+                body:formData
+            });
+
+            const data =
+            await response.json();
+
+            if (
+                data.status !== "OK"
+            ) {
+
+                faceWarnings++;
+
+                document
+                .getElementById(
+                "faceWarning"
+                )
+                .innerText =
+                "⚠ " +
+                data.status +
+                " (" +
+                faceWarnings +
+                "/" +
+                maxFaceWarnings +
+                ")";
+
+                if (
+                    faceWarnings >=
+                    maxFaceWarnings
+                ) {
+
+                    alert(
+                    "Face verification failed"
+                    );
+
+                    document
+                    .querySelector(
+                    "form"
+                    )
+                    .submit();
+                }
+
+            } else {
+
+                document
+                .getElementById(
+                "faceWarning"
+                )
+                .innerText =
+                "✅ Face Monitoring Active";
+            }
+
+        } catch (err) {
+
+            document
+            .getElementById(
+            "faceWarning"
+            )
+            .innerText =
+            "⚠ Server issue";
+
+        }
+
+    }, "image/jpeg");
+
+}, 5000);
+
+</script>
+
+</body>
+</html>

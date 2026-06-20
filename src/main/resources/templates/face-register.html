@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Face Registration | Smart Examination System</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/face.css}">
+</head>
+<body>
+
+<div class="face-container">
+    <div class="face-card">
+
+        <h2>Face Registration</h2>
+        <p class="subtitle">
+            Secure your account using <b>AI Face Recognition</b>
+        </p>
+
+        <!-- Alerts -->
+        <div id="alert" class="alert hidden"></div>
+
+        <!-- Camera Preview -->
+        <video id="video" autoplay></video>
+        <canvas id="canvas" hidden></canvas>
+
+        <!-- Instructions -->
+        <ul class="instructions">
+            <li>✔ Sit straight and face the camera</li>
+            <li>✔ Ensure good lighting</li>
+            <li>✔ Only one face allowed</li>
+        </ul>
+
+        <!-- ✅ CORRECT: Email from controller -->
+        <input type="hidden" id="email" th:value="${email}">
+
+        <!-- Buttons -->
+        <div class="btn-group">
+            <button onclick="captureFace()">Capture Face</button>
+            <button class="secondary" onclick="registerFace()">Register Face</button>
+        </div>
+
+        <p class="note">
+            This biometric data is securely stored and used only for login.
+        </p>
+
+    </div>
+</div>
+
+<script>
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const alertBox = document.getElementById("alert");
+
+    // Start camera
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => video.srcObject = stream)
+        .catch(() => showAlert("Camera access denied", "error"));
+
+    function captureFace() {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext("2d").drawImage(video, 0, 0);
+        showAlert("Face captured successfully", "success");
+    }
+function registerFace() {
+    canvas.toBlob(blob => {
+
+        const email = document.getElementById("email").value;
+
+        if (!email) {
+            showAlert("Email not found", "error");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("image", blob);
+      formData.append("email", document.getElementById("email").value); // 🔥 THIS WAS MISSING
+
+        fetch("/face-register", {
+            method: "POST",
+            body: formData
+        })
+        .then(res => res.text())
+        .then(status => {
+            if (status === "FACE_REGISTERED") {
+
+    showAlert(
+        "Face registered successfully! Enter approval OTP.",
+        "success"
+    );
+
+    setTimeout(() => {
+
+        const email =
+            document.getElementById("email").value;
+
+        window.location.href =
+            "/approve-otp?email=" +
+            encodeURIComponent(email);
+
+    }, 2000);
+
+}else {
+                showAlert(status, "error");
+            }
+        })
+        .catch(() => showAlert("Server error", "error"));
+
+    }, "image/jpeg");
+}
+
+
+    function showAlert(msg, type) {
+        alertBox.className = `alert ${type}`;
+        alertBox.innerText = msg;
+        alertBox.classList.remove("hidden");
+        setTimeout(() => alertBox.classList.add("hidden"), 4000);
+    }
+</script>
+
+</body>
+</html>

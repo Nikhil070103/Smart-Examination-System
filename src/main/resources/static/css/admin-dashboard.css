@@ -1,0 +1,315 @@
+/* RESET */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+    color:#1f2937;
+}
+
+/* MAIN DASHBOARD */
+.dashboard{
+    display:flex;
+    min-height:100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+    width:250px;
+    background:#1e3a5f;
+    color:white;
+    padding:25px 20px;
+    position:fixed;
+    height:100%;
+    left:0;
+    top:0;
+}
+
+.sidebar h2{
+    margin-bottom:30px;
+    text-align:center;
+    font-size:24px;
+    color:#fff;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:12px 15px;
+    margin:8px 0;
+    border-radius:8px;
+    transition:0.3s;
+    font-size:15px;
+}
+
+.sidebar a:hover{
+    background:#2c527e;
+}
+
+/* MAIN CONTENT */
+.main-content{
+    margin-left:250px;
+    width:calc(100% - 250px);
+    padding:30px;
+}
+
+/* HEADER */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.header h1{
+    font-size:30px;
+    color:#1e3a5f;
+}
+
+.header p{
+    color:#6b7280;
+    margin-top:5px;
+}
+
+/* ADMIN EMAIL */
+.admin-email{
+    background:white;
+    padding:12px 18px;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.08);
+    font-weight:600;
+    color:#1e3a5f;
+}
+
+/* KPI GRID */
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+    margin-bottom:30px;
+}
+
+.stat-card{
+    background:white;
+    padding:25px;
+    border-radius:14px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    text-align:center;
+}
+
+.stat-card h3{
+    color:#6b7280;
+    font-size:16px;
+    margin-bottom:10px;
+}
+
+.stat-card h2{
+    color:#1e3a5f;
+    font-size:32px;
+}
+
+/* GRID */
+.content-grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:25px;
+    margin-bottom:25px;
+}
+
+/* CARDS */
+.table-card,
+.panel-card{
+    background:white;
+    padding:25px;
+    border-radius:14px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.table-card h2,
+.panel-card h2{
+    color:#1e3a5f;
+    margin-bottom:20px;
+}
+
+/* TABLE */
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#1e3a5f;
+    color:white;
+    padding:12px;
+    text-align:left;
+}
+
+td{
+    padding:12px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+tr:hover{
+    background:#f9fafb;
+}
+
+/* MINI CARDS */
+.mini-card{
+    background:#f8fafc;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:12px;
+    border-left:4px solid #1e3a5f;
+}
+
+.mini-card h4{
+    color:#1e3a5f;
+    margin-bottom:5px;
+}
+
+.mini-card p{
+    color:#374151;
+    margin-bottom:4px;
+}
+
+.mini-card small{
+    color:#6b7280;
+}
+
+/* BUTTONS */
+button{
+    width:100%;
+    border:none;
+    background:#1e3a5f;
+    color:white;
+    padding:12px;
+    margin-bottom:12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#2c527e;
+}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+    .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .content-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:768px){
+    .sidebar{
+        width:200px;
+    }
+
+    .main-content{
+        margin-left:200px;
+        width:calc(100% - 200px);
+    }
+
+    .stats-grid{
+        grid-template-columns:1fr;
+    }
+
+    .header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+}
+
+/* ================= FIXED HEIGHT PANELS ================= */
+.student-panel,
+.exam-panel,
+.notification-panel{
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Quick action fixed (no scroll) */
+.action-panel{
+    height: 320px;
+}
+
+/* ================= SCROLL AREAS ================= */
+.table-scroll,
+.section-scroll{
+    height: 320px;          /* force smaller area */
+    overflow-y: scroll;     /* always show */
+    overflow-x: hidden;
+    padding-right: 6px;
+}
+
+/* Recent Student panel */
+.student-panel{
+    height:320px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+/* only table body scroll */
+.table-scroll{
+    flex:1;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+/* table */
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+/* FIX HEADER */
+thead{
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+th{
+    background:#1e3a5f;
+    color:white;
+    padding:12px;
+    text-align:left;
+}
+
+/* rows */
+td{
+    padding:12px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+/* ================= SCROLLBAR ================= */
+.table-scroll::-webkit-scrollbar,
+.section-scroll::-webkit-scrollbar{
+    width: 8px;
+}
+
+.table-scroll::-webkit-scrollbar-track,
+.section-scroll::-webkit-scrollbar-track{
+    background: #e5e7eb;
+    border-radius: 10px;
+}
+
+.table-scroll::-webkit-scrollbar-thumb,
+.section-scroll::-webkit-scrollbar-thumb{
+    background: #1e3a5f;
+    border-radius: 10px;
+}

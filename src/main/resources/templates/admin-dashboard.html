@@ -2,29 +2,166 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/admin-dashboard.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
-<div class="dashboard-container">
-    <h1>Admin Dashboard</h1>
+<div class="dashboard">
 
-    <div class="card-container">
-        <div class="card" onclick="location.href='/admin/students'">
-            <h3>Manage Students</h3>
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+	    <h2>SES Admin</h2>
+	
+	    <a href="/admin/dashboard">🏠 Dashboard</a>
+	    <a href="/admin/students/add">➕ Add Student</a>
+	    <a href="/admin/students/list">👨 View Students</a>
+	
+	    <!-- NEW -->
+	    <a href="/admin/students">⚙ Manage Students</a>
+	
+	    <a href="/admin/manage-exams">📝 Manage Exams</a>
+	    <a href="/admin/exams/create">📅 Create Exam</a>
+	    <a href="/admin/results">📊 Results</a>
+	    <a href="/logout">🚪 Logout</a>
+	</div>
+
+    <!-- MAIN -->
+    <div class="main-content">
+
+        <!-- HEADER -->
+        <div class="header">
+            <div>
+                <h1>Welcome Admin 👋</h1>
+                <p>Smart Examination System Dashboard</p>
+            </div>
+
+            <div class="admin-email">
+                <span th:text="${admin.email}">admin@gmail.com</span>
+            </div>
         </div>
 
-        <div class="card" onclick="location.href='/admin/exams'">
-            <h3>Manage Exams</h3>
+        <!-- KPI CARDS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Students</h3>
+                <h2 th:text="${totalStudents}">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Exams</h3>
+                <h2 th:text="${totalExams}">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <h3>Live Exams</h3>
+                <h2 th:text="${liveExams}">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <h3>Upcoming Exams</h3>
+                <h2 th:text="${upcomingExams}">0</h2>
+            </div>
         </div>
 
-        <div class="card" onclick="location.href='/admin/results'">
-            <h3>View Results</h3>
+        <!-- CONTENT -->
+        <div class="content-grid">
+
+            <!-- RECENT STUDENTS -->
+            <div class="table-card student-panel">
+                <h2>Recent Students</h2>
+				<div class="table-scroll">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Roll No</th>
+                        <th>Course</th>
+                        <th>Semester</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="s : ${recentStudents}">
+                        <td th:text="${s.name}">Nikhil</td>
+                        <td th:text="${s.rollNumber}">101</td>
+                        <td th:text="${s.course}">MCA</td>
+                        <td th:text="${s.semester}">4</td>
+                    </tr>
+                    </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- UPCOMING EXAMS -->
+            <div class="panel-card exam-panel">
+                <h2>Upcoming Exams</h2>
+			<div class="section-scroll">
+                <div class="mini-card"
+                     th:each="exam : ${upcomingExamList}">
+                    <h4 th:text="${exam.examName}">AI Exam</h4>
+                    <p th:text="${exam.subject}">Subject</p>
+                    <small th:text="${#temporals.format(exam.startTime,'dd-MM-yyyy HH:mm')}"></small>
+                </div>
+              </div>
+            </div>
         </div>
 
-        <div class="card" onclick="location.href='/logout'">
-            <h3>Logout</h3>
+        <!-- LOWER GRID -->
+        <div class="content-grid">
+<!-- NOTIFICATIONS -->
+<div class="panel-card notification-panel">
+    <h2>Notifications</h2>
+
+			    <!-- Scroll Area -->
+			    <div class="section-scroll">
+			
+			        <!-- if notifications exist -->
+			        <div th:if="${notifications != null and !notifications.isEmpty()}">
+			
+			            <div class="mini-card"
+			                 th:each="n : ${notifications}">
+			                <p th:text="${n}">
+			                    Notification
+			                </p>
+			            </div>
+			
+			        </div>
+			
+			        <!-- if empty -->
+			        <div th:if="${notifications == null or notifications.isEmpty()}">
+			            <div class="mini-card">
+			                <p>No notifications available</p>
+			            </div>
+			        </div>
+			
+			    </div>
+			</div>
+
+            <!-- QUICK ACTIONS -->
+            <div class="panel-card action-panel">
+                <h2>Quick Actions</h2>
+
+                <button onclick="location.href='/admin/students/add'">
+                    Add Student
+                </button>
+
+                <button onclick="location.href='/admin/exams/create'">
+                    Create Exam
+                </button>
+
+                <button onclick="location.href='/admin/manage-exams'">
+                    Manage Exams
+                </button>
+
+                <button onclick="location.href='/admin/results'">
+                    View Results
+                </button>
+            </div>
+
         </div>
+
     </div>
 </div>
 
